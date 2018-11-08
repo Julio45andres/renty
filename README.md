@@ -34,17 +34,17 @@ $ git checkout -b feature/<nombre>
 Despues de hacer hacer los cambios confirmalos con:
 
 ```bash
-$ docker-compose run web python manage.py makemigrations
+$ docker-compose run --rm web python manage.py makemigrations
 ```
 
 Finalmente aplicamos las migraciones al contenedor:
 
 ```bash
-$ docker-compose run web python manage.py migrate
+$ docker-compose run --rm web python manage.py migrate
 ```
 
 Todo comando que se vaya a correr sobre el contenedor debe ser de la siguiente forma:
 
 ```bash
-$ docker-compose run web <Inserte su comando aca>
+$ docker-compose run --rm web <Inserte su comando aca>
 ```
