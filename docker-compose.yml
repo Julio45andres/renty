@@ -5,6 +5,7 @@ services:
     image: postgres
   web:
     build: .
+    command: python3 manage.py migrate --noinput
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
@@ -12,3 +13,4 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    image: julianmunozm/renty-dod
