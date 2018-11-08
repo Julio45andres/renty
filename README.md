@@ -48,3 +48,8 @@ Todo comando que se vaya a correr sobre el contenedor debe ser de la siguiente f
 ```bash
 $ docker-compose run web <Inserte su comando aca>
 ```
+Por ejemplo para iniciar una nueva aplicación correr
+
+```bash
+$ docker-compose run web django-admin.py startapp <Nombre de la app>
+```
