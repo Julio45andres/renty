@@ -22,3 +22,11 @@ Para crear un nuevo feature, estando en la rama develop:
 ``` bash
 $ git checkout -b feature/<nombre>
 ```
+Despues de hacer hacer los cambios confirmalos con
+``` bash
+$ docker-compose run web python manage.py makemigrations
+```
+Finalmente aplicamos las migraciones al contenedor
+``` bash
+$ docker-compose run web python manage.py migrate
+```
