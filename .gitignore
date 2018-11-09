@@ -122,5 +122,11 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+# vscode
 
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 # End of https://www.gitignore.io/api/django
