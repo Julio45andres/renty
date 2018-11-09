@@ -4,12 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Django
-psycopg2-binary
-djangorestframework
-markdown
-django-filter
-gunicorn
+requests = "*"
 [dev-packages]
 
 [requires]
