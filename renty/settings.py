@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apps renty
+    'detail.apps.DetailConfig',
+    # Framework REST django
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
