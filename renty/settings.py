@@ -80,9 +80,10 @@ WSGI_APPLICATION = 'renty.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'db',
+        'NAME': 'd8lq0scnnb269d',
+        'USER': 'dchvskjvbvpnft',
+        'PASSWORD': '0a68233a4d2f4cba332c40420de4af1ea972e1e860fa6c6761fc2de192728511',
+        'HOST': 'ec2-54-83-38-174.compute-1.amazonaws.com',
         'PORT': 5432,
     }
 }
