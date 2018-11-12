@@ -21,5 +21,7 @@ from detail import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^rentals/', views.RentalView.as_view()),
-    url(r'^cars/', views.CarView.as_view())
+    url(r'^cars/$', views.CarView.as_view()),
+    url(r'^cars/(?P<carid>[-\w]+)/$', views.CarView.as_view()),
+    url(r'^cars/search$', views.CarSearchView.as_view())
 ]
