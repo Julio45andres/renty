@@ -23,20 +23,22 @@ class CarSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Car
-        fields = ('id', 'brand', 'thumbnail', 'price', 'category',
+        fields = ('id', 'brand', 'thumbnail', 'price', 'type',
                   'model', 'rental', 'plate', 'rating', 'capacity', 'transmission',
                   'doors', 'color', 'kms', 'pictures'
                   )
+CarSerializer._declared_fields["type"] = serializers.CharField(source="category")
 
 class CarSerializerToSave(serializers.ModelSerializer):
     pictures = serializers.ListField(child=serializers.CharField(max_length=2083))
 
     class Meta:
         model = Car
-        fields = ('id', 'brand', 'thumbnail', 'price', 'category',
+        fields = ('id', 'brand', 'thumbnail', 'price', 'type',
                   'model', 'rental', 'plate', 'rating', 'capacity', 'transmission',
                   'doors', 'color', 'kms', 'pictures'
                   )
+CarSerializerToSave._declared_fields["type"] = serializers.CharField(source="category")
 
 class CarSearchSerializer(serializers.HyperlinkedModelSerializer):
     rental = RentalSerializer(read_only=True)
