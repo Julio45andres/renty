@@ -4,6 +4,8 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import Rental, Car
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+import django_filters
 
 
 class RentalView(generics.ListAPIView):
@@ -46,4 +48,10 @@ class CarSearchView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset =Car.objects.all()
+        _type = self.request.query_params.get('type', None)
+        model = self.request.query_params.get('model', None)
+        if _type is not None:
+            queryset = queryset.filter(category__iexact=_type)
+        # if model is not None:
+        #     queryset = queryset.filter(model__iexact=model)
         return queryset
