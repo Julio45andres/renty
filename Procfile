@@ -1,1 +1,1 @@
-web: gunicorn renty.wsgi --preload
+web: gunicorn renty.wsgi:application
