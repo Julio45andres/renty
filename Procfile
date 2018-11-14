@@ -1,1 +1,1 @@
-web: gunicorn renty.wsgi:application -log-file=- --log-level debug
+web: gunicorn renty.wsgi:application --log-level debug
