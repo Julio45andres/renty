@@ -4,8 +4,6 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import Rental, Car
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
-from django_filters.rest_framework import DjangoFilterBackend
-import django_filters
 
 
 class RentalView(generics.ListAPIView):
