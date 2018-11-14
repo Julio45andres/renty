@@ -56,5 +56,8 @@ class CarSearchView(generics.ListAPIView):
         _from = int(_from)
         to = self.request.query_params.get('to', '0')
         to = int(to)
-        queryset = queryset[_from:to]
+        if to is not 0:
+            queryset = queryset[_from:to]
+        else:
+            queryset = queryset[_from:]
         return queryset
