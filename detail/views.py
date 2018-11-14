@@ -45,10 +45,13 @@ class CarSearchView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Car.objects.all()
+        # type es una palabra reservada de python
         _type = self.request.query_params.get('type', None)
+        pickup = self.request.query_params.get('pickup', None)
         if _type is not None:
             queryset = queryset.filter(category__iexact=_type)
-
+        if pickup is not None:
+            queryset = queryset.filter(pickup__iexact=pickup)
         _from = self.request.query_params.get('from', None)
         _from = 0 + int(_from)
         to = self.request.query_params.get('to', None)
