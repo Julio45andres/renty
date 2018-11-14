@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from .models import Rental, Car
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
 
-
 class RentalView(generics.ListAPIView):
     serializer_class = RentalSerializer
 
@@ -55,6 +54,4 @@ class CarSearchView(generics.ListAPIView):
         to = self.request.query_params.get('to', None)
         to = 0 + int(to)
         queryset = queryset[_from:to]
-        # if model is not None:
-        #     queryset = queryset.filter(model__iexact=model)
         return queryset
