@@ -3,6 +3,8 @@
 Link de la app: \
 https://renty-web.herokuapp.com/cars/search?type=suv 
 
+Se deben borrar los archivos Pipfile y Pipfile.lock para desplegar en heroku. \
+
 Hacer pull antes de trabajar:
 
 ```bash
