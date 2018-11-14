@@ -3,6 +3,8 @@
 Link de la app: \
 https://renty-web.herokuapp.com/cars/search?type=suv 
 
+El proyecto requiere python 3.6, pip y pipenv.
+
 Se deben borrar los archivos Pipfile y Pipfile.lock para desplegar en heroku.
 
 Hacer pull antes de trabajar:
