@@ -45,11 +45,16 @@ class CarSearchView(generics.ListAPIView):
     serializer_class = CarSearchSerializer
 
     def get_queryset(self):
-        queryset =Car.objects.all()
+        queryset = Car.objects.all()
         _type = self.request.query_params.get('type', None)
-        model = self.request.query_params.get('model', None)
         if _type is not None:
             queryset = queryset.filter(category__iexact=_type)
+
+        _from = self.request.query_params.get('from', None)
+        _from = 0 + int(_from)
+        to = self.request.query_params.get('to', None)
+        to = 0 + int(to)
+        queryset = queryset[_from:to]
         # if model is not None:
         #     queryset = queryset.filter(model__iexact=model)
         return queryset
