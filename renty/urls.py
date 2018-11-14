@@ -19,7 +19,7 @@ from django.urls import path
 from detail import views
 
 urlpatterns = [
-    path('', views.CarView.as_view()),
+    # path('', views.CarView.as_view()),
     path('admin/', admin.site.urls),
     url(r'^rentals/', views.RentalView.as_view()),
     url(r'^cars/$', views.CarView.as_view()),
