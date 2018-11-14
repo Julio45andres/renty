@@ -17,13 +17,13 @@ class Car(Model):
     # type y class son palabras reservadas
     category = CharField(max_length=50)
     model = CharField(max_length=50)
-    pickup = CharField(max_length=100)
+    pickup = CharField(default="Medellin, Aeropuerto Olaya Herrera", max_length=100)
     rental = ForeignKey('Rental', on_delete=CASCADE)
     plate = IntegerField()
     rating = IntegerField(default=0, validators=[
                           MaxValueValidator(5), MinValueValidator(0)])
     capacity = IntegerField(default=1)
-    transmission = CharField(max_length=20)
+    transmission = CharField(default="Mecanica", max_length=20)
     doors = IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(7)])
     color = CharField(max_length=20)
     kms = IntegerField(default=0)
