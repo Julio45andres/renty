@@ -18,7 +18,7 @@ class Car(Model):
     # type y class son palabras reservadas
     category = CharField(max_length=50)
     model = CharField(max_length=50)
-    pickup = CharField(default="Medellin, Aeropuerto Olaya Herrera", max_length=100)
+    pickup = CharField(default="Aeropuerto", max_length=100)
     rental = ForeignKey('Rental', on_delete=CASCADE)
     plate = IntegerField()
     rating = IntegerField(default=0, validators=[
