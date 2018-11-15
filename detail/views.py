@@ -71,7 +71,5 @@ class CarSearchView(generics.ListAPIView):
         return queryset
 
 def _parse_date(date):
-        parsed_date = parse_datetime(date)
-        if parsed_date is None:
-            parsed_date = datetime.combine(parse_date(date), datetime.min.time())
+        parsed_date = parse_date(date)
         return parsed_date
