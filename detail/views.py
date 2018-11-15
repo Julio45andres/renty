@@ -63,6 +63,7 @@ class CarSearchView(generics.ListAPIView):
         if _from is None or to is None:
             queryset = Car.objects.none()
         else:
+            if _from > to: raise Http404
             fromReservations = reservatedCars.filter(fromDate__range=(_from, to))
             toReservations = reservatedCars.filter(toDate__range=(_from, to))
             # Union
