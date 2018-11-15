@@ -1,4 +1,4 @@
-from django.db.models import CASCADE, IntegerField, CharField, DateTimeField, ForeignKey, AutoField, Model
+from django.db.models import CASCADE, IntegerField, CharField, DateField, ForeignKey, AutoField, Model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.postgres.fields import ArrayField
 from datetime import datetime
@@ -18,7 +18,7 @@ class Car(Model):
     # type y class son palabras reservadas
     category = CharField(max_length=50)
     model = CharField(max_length=50)
-    pickup = CharField(default="Medellin, Aeropuerto Olaya Herrera", max_length=100)
+    pickup = CharField(default="Aeropuerto", max_length=100)
     rental = ForeignKey('Rental', on_delete=CASCADE)
     plate = IntegerField()
     rating = IntegerField(default=0, validators=[
@@ -33,5 +33,7 @@ class Car(Model):
 class Reservation(Model):
     id = AutoField(primary_key=True)
     car = ForeignKey('Car', on_delete=CASCADE)
-    fromDate = DateTimeField()
-    toDate = DateTimeField()
+    fromDate = DateField()
+    toDate = DateField()
+    # fromDate = DateTimeField()
+    # toDate = DateTimeField()

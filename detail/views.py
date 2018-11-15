@@ -63,6 +63,7 @@ class CarSearchView(generics.ListAPIView):
         if _from is None or to is None:
             queryset = Car.objects.none()
         else:
+            if _from > to: raise Http404
             fromReservations = reservatedCars.filter(fromDate__range=(_from, to))
             toReservations = reservatedCars.filter(toDate__range=(_from, to))
             # Union
@@ -71,7 +72,9 @@ class CarSearchView(generics.ListAPIView):
         return queryset
 
 def _parse_date(date):
-        parsed_date = parse_datetime(date)
-        if parsed_date is None:
-            parsed_date = datetime.combine(parse_date(date), datetime.min.time())
+        # parsed_date = parse_datetime(date)
+        # if parsed_date is None:
+        #     parsed_date = datetime.combine(parse_date(date), datetime.min.time())
+        # return parsed_date
+        parsed_date = parse_date(date)
         return parsed_date
