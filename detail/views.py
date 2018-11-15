@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
-from .models import Rental, Car
+from .models import Rental, Car, Reservation
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
 from django.http import Http404
+from django.utils.dateparse import parse_datetime, parse_date
+from datetime import datetime, date
 
 class RentalView(generics.ListAPIView):
     serializer_class = RentalSerializer
@@ -43,8 +45,10 @@ class CarView(generics.ListAPIView):
 class CarSearchView(generics.ListAPIView):
     serializer_class = CarSearchSerializer
 
+
     def get_queryset(self):
         queryset = Car.objects.all()
+        reservatedCars = Reservation.objects.all()
         # type es una palabra reservada de python
         _type = self.request.query_params.get('type', None)
         pickup = self.request.query_params.get('pickup', None)
@@ -52,12 +56,22 @@ class CarSearchView(generics.ListAPIView):
             queryset = queryset.filter(category__iexact=_type)
         if pickup is not None:
             queryset = queryset.filter(pickup__iexact=pickup)
-        _from = self.request.query_params.get('from', '0')
-        _from = int(_from)
-        to = self.request.query_params.get('to', '0')
-        to = int(to)
-        if to is not 0:
-            queryset = queryset[_from:to]
+        _from = self.request.query_params.get('from', None)
+        _from = _parse_date(str(_from))
+        to = self.request.query_params.get('to', None)
+        to = _parse_date(str(to))
+        if _from is None or to is None:
+            queryset = Car.objects.none()
         else:
-            queryset = queryset[_from:]
+            fromReservations = reservatedCars.filter(fromDate__range=(_from, to))
+            toReservations = reservatedCars.filter(toDate__range=(_from, to))
+            # Union
+            reservatedCars = (fromReservations | toReservations).values('car')
+            queryset = queryset.exclude(id__in=reservatedCars)
         return queryset
+
+def _parse_date(date):
+        parsed_date = parse_datetime(date)
+        if parsed_date is None:
+            parsed_date = datetime.combine(parse_date(date), datetime.min.time())
+        return parsed_date
