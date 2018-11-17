@@ -46,9 +46,7 @@ class CarView(generics.ListAPIView):
         queryset = Car.objects.all()
         if carid is not None:
             queryset = queryset.filter(id=carid)
-            car_one = queryset[0]
-            return car_one
-        
+        return queryset
 
     def post(self, request):
         serializer = CarSerializerToSave(data=request.data)
