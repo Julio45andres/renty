@@ -46,7 +46,7 @@ class CarView(generics.ListAPIView):
         if carid is not None:
             response = car.objects.all()
             response = response.filter(id=cardid)[0]
-        else
+        else:
             response = car.objects.all()
         return response
 
