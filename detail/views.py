@@ -60,6 +60,14 @@ class CarView(generics.ListAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CarViewId(generics.ListAPIView):
+    serializer_class = CarSerializer
+    lookup_url_kwarg = "carid"
+
+    def get_queryset(self):
+        carid = self.kwargs.get(self.lookup_url_kwarg)
+        queryset = Car.objects.get(id=carid)
+        return queryset
 
 class CarSearchView(generics.ListAPIView):
     serializer_class = CarSearchSerializer
