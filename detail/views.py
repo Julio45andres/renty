@@ -24,16 +24,17 @@ class RentalView(generics.ListAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @require_http_methods(["GET", "POST"])
-    def api_getto(request):
-        response = JsonResponse(
-            # your stuff here
-        )
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        response["Access-Control-Max-Age"] = "1000"
-        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-        return response
+
+@require_http_methods(["GET", "POST"])
+def api_getto(request):
+    response = JsonResponse(
+        # your stuff here
+    )
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+    return response
 
 
 class CarView(generics.ListAPIView):
@@ -54,17 +55,6 @@ class CarView(generics.ListAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @require_http_methods(["GET", "POST"])
-    def api_getto(request):
-        response = JsonResponse(
-            # your stuff here
-        )
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        response["Access-Control-Max-Age"] = "1000"
-        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-        return response
 
 
 class CarSearchView(generics.ListAPIView):
@@ -96,17 +86,6 @@ class CarSearchView(generics.ListAPIView):
             reservatedCars = (fromReservations | toReservations).values('car')
             queryset = queryset.exclude(id__in=reservatedCars)
         return queryset
-
-    @require_http_methods(["GET", "POST"])
-    def api_getto(request):
-        response = JsonResponse(
-            # your stuff here
-        )
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        response["Access-Control-Max-Age"] = "1000"
-        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-        return response
 
 
 def _parse_date(date):
