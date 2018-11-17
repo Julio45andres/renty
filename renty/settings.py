@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     # Apps renty
     'detail.apps.DetailConfig',
     # Framework REST django
@@ -61,7 +64,7 @@ ROOT_URLCONF = 'renty.urls'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    
+
 )
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

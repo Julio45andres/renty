@@ -5,3 +5,4 @@ psycopg2==2.7.6.1
 psycopg2-binary==2.7.6.1
 pytz==2018.7
 whitenoise==4.1
+django-cors-headers
