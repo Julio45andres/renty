@@ -52,6 +52,10 @@ class CarView(generics.ListAPIView):
         serializer = CarSerializerToSave(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            Response["Access-Control-Allow-Origin"] = "*"
+            Response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+            Response["Access-Control-Max-Age"] = "1000"
+            Response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
