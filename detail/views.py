@@ -44,7 +44,7 @@ class CarView(generics.ListAPIView):
     def get_queryset(self):
         carid = self.kwargs.get(self.lookup_url_kwarg)
         if carid is not None:
-            queryset = Car.objects.get(pk=carid)
+            queryset = Car.objects.get(id=carid)
             return queryset
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
