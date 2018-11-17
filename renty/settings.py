@@ -69,7 +69,9 @@ MIDDLEWARE_CLASSES = (
     # 'renty.middleware.corsMiddleware',
 )
 
+# CORS Config
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
 
 ROOT_URLCONF = 'renty.urls'
 
