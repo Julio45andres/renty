@@ -44,11 +44,12 @@ class CarView(generics.ListAPIView):
     def get_queryset(self):
         carid = self.kwargs.get(self.lookup_url_kwarg)
         if carid is not None:
-            response = car.objects.all()
-            response = response.filter(id=cardid)[0]
+            res_car = car.objects.all()
+            res_car = res_car.filter(id=cardid)[0]
+            return res_car
         else:
-            response = car.objects.all()
-        return response
+            res_list = car.objects.all()
+            return res_list
 
 
 
