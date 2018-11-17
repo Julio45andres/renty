@@ -47,7 +47,7 @@ class CarView(generics.ListAPIView):
         carid = self.kwargs.get(self.lookup_url_kwarg)
         car = Car.objects.get(id=carid)
         serializer_class=CarSerializer(car,many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = CarSerializerToSave(data=request.data)
