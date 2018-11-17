@@ -6,6 +6,8 @@ from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, C
 from django.http import Http404
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
+from django.views.decorators.http import require_http_methods
+
 
 class RentalView(generics.ListAPIView):
     serializer_class = RentalSerializer
@@ -22,10 +24,21 @@ class RentalView(generics.ListAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @require_http_methods(["GET", "POST"])
+    def api_getto(request):
+        response = JsonResponse(
+            # your stuff here
+        )
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+        return response
+
 
 class CarView(generics.ListAPIView):
     serializer_class = CarSerializer
-    lookup_url_kwarg="carid"
+    lookup_url_kwarg = "carid"
 
     def get_queryset(self):
         carid = self.kwargs.get(self.lookup_url_kwarg)
@@ -42,9 +55,20 @@ class CarView(generics.ListAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @require_http_methods(["GET", "POST"])
+    def api_getto(request):
+        response = JsonResponse(
+            # your stuff here
+        )
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+        return response
+
+
 class CarSearchView(generics.ListAPIView):
     serializer_class = CarSearchSerializer
-
 
     def get_queryset(self):
         queryset = Car.objects.all()
@@ -63,14 +87,28 @@ class CarSearchView(generics.ListAPIView):
         if _from is None or to is None:
             queryset = Car.objects.none()
         else:
-            if _from > to: raise Http404
-            fromReservations = reservatedCars.filter(fromDate__range=(_from, to))
+            if _from > to:
+                raise Http404
+            fromReservations = reservatedCars.filter(
+                fromDate__range=(_from, to))
             toReservations = reservatedCars.filter(toDate__range=(_from, to))
             # Union
             reservatedCars = (fromReservations | toReservations).values('car')
             queryset = queryset.exclude(id__in=reservatedCars)
         return queryset
 
+    @require_http_methods(["GET", "POST"])
+    def api_getto(request):
+        response = JsonResponse(
+            # your stuff here
+        )
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+        return response
+
+
 def _parse_date(date):
-        parsed_date = parse_date(date)
-        return parsed_date
+    parsed_date = parse_date(date)
+    return parsed_date
