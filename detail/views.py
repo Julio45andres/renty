@@ -46,13 +46,11 @@ class CarView(generics.ListAPIView):
         if carid is not None:
             response = car.objects.all()
             response = response.filter(id=cardid)[0]
-        response = car.objects.all()
+        else
+            response = car.objects.all()
         return response
 
-"""         queryset = Car.objects.all()
-        if carid is not None:
-            queryset = queryset.filter(id=carid)
-        return queryset """
+
 
     def post(self, request):
         serializer = CarSerializerToSave(data=request.data)
