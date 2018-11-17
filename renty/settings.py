@@ -66,6 +66,7 @@ MIDDLEWARE_CLASSES = (
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     # 'renty.middleware.corsMiddleware',
 )
 
