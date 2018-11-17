@@ -10,4 +10,4 @@ https://renty-web.herokuapp.com/cars/3
 Para buscar por fechas, tipo y pickup point: \
 https://renty-web.herokuapp.com/cars/search?from=2018-11-15&to=2018-11-17&type=sport&pickup=aeropuerto
 
-El formato de la fecha es: Año-mes-dia, aaaa-mm-dd
+El formato de la fecha es: Año-mes-dia
