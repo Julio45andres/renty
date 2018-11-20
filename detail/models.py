@@ -4,11 +4,6 @@ from django.contrib.postgres.fields import ArrayField
 from datetime import datetime
 
 
-class Rental(Model):
-    id = AutoField(primary_key=True)
-    name = CharField(max_length=50)
-
-
 class CarRental(Model):
     id = AutoField(primary_key=True)
     _id = IntegerField(default=967543461)
