@@ -38,8 +38,8 @@ def api_getto(request):
 
 
 class CarView(APIView):
-    serializer_class=CarSerializer
-    
+    serializer_class = CarSerializer
+
     def get(self, request, carid, format=None):
         if carid is not None:
             cars = Car.objects.filter(id=carid)
