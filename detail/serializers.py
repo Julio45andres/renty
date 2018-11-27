@@ -1,12 +1,16 @@
 from rest_framework import serializers
-from .models import Rental, Car
+from .models import CarRental, Car
 from rest_framework.fields import ListField
 
 
 class RentalSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Rental
+        model = CarRental
         fields = ('id', 'name')
+
+
+RentalSerializer._declared_fields["id"] = serializers.IntegerField(
+    source="_id")
 
 
 class PictureSerializer(serializers.Serializer):
@@ -16,21 +20,28 @@ class PictureSerializer(serializers.Serializer):
         super(PictureSerializer, self).__init__(*args, **kwargs)
         if kwargs.get('many', False):
             self.fields.pop('celery_state')
-            
+
+
 class CarSerializer(serializers.ModelSerializer):
-    pictures = serializers.ListField(child=serializers.CharField(max_length=2083))
+    pictures = serializers.ListField(
+        child=serializers.CharField(max_length=2083))
     rental = RentalSerializer(read_only=True)
-    
+
     class Meta:
         model = Car
         fields = ('id', 'brand', 'thumbnail', 'price', 'type',
                   'model', 'rental', 'plate', 'rating', 'capacity', 'transmission',
                   'doors', 'color', 'kms', 'pictures'
                   )
-CarSerializer._declared_fields["type"] = serializers.CharField(source="category")
+
+
+CarSerializer._declared_fields["type"] = serializers.CharField(
+    source="category")
+
 
 class CarSerializerToSave(serializers.ModelSerializer):
-    pictures = serializers.ListField(child=serializers.CharField(max_length=2083))
+    pictures = serializers.ListField(
+        child=serializers.CharField(max_length=2083))
 
     class Meta:
         model = Car
@@ -38,7 +49,11 @@ class CarSerializerToSave(serializers.ModelSerializer):
                   'model', 'rental', 'plate', 'rating', 'capacity', 'transmission',
                   'doors', 'color', 'kms', 'pictures'
                   )
-CarSerializerToSave._declared_fields["type"] = serializers.CharField(source="category")
+
+
+CarSerializerToSave._declared_fields["type"] = serializers.CharField(
+    source="category")
+
 
 class CarSearchSerializer(serializers.HyperlinkedModelSerializer):
     rental = RentalSerializer(read_only=True)
@@ -48,11 +63,11 @@ class CarSearchSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'brand', 'thumbnail', 'price', 'type',
                   'model', 'rental'
                   )
-CarSearchSerializer._declared_fields["type"] = serializers.CharField(source="category")
-        
-                  
+
+
+CarSearchSerializer._declared_fields["type"] = serializers.CharField(
+    source="category")
+
 
 class StringListField(serializers.ListField):
     child = serializers.CharField()
-
-

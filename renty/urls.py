@@ -17,6 +17,9 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
 from detail import views
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='API Renty')
 
 urlpatterns = [
     # path('', views.CarView.as_view()),
@@ -24,5 +27,6 @@ urlpatterns = [
     url(r'^rentals/', views.RentalView.as_view()),
     url(r'^cars/$', views.CarView.as_view()),
     url(r'^cars/(?P<carid>[-\w]+)/$', views.CarView.as_view()),
-    url(r'^cars/search$', views.CarSearchView.as_view())
+    url(r'^cars/search$', views.CarSearchView.as_view()),
+    url(r'^docs/', schema_view)
 ]

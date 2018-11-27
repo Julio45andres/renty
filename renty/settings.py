@@ -26,7 +26,7 @@ SECRET_KEY = 'by3mdsrbh43tbinkk#psk+h^9_exiiy(^4(*ae_kxgm!7yj#c+'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = TRUE
 # ***** PRODUCTION SETTINGS ******
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,12 +46,14 @@ INSTALLED_APPS = [
     'detail.apps.DetailConfig',
     # Framework REST django
     'rest_framework',
+    'rest_framework_swagger',
     'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -61,7 +63,7 @@ MIDDLEWARE = [
 ]
 
 MIDDLEWARE_CLASSES = (
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

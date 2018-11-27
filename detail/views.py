@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
-from .models import Rental, Car, Reservation
+from .models import CarRental, Car, Reservation
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
 from django.http import Http404
 from django.utils.dateparse import parse_datetime, parse_date
@@ -13,14 +13,29 @@ class RentalView(generics.ListAPIView):
     serializer_class = RentalSerializer
 
     def get_queryset(self):
-        queryset = Rental.objects.all()
-        return queryset
+        response = JsonResponse(
+            queryset = Rental.objects.all()
+        )
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+        """ queryset = Rental.objects.all() """
+        return response
 
     def post(self, request):
         serializer = RentalSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            response = JsonResponse(
+                serializer.data, status=status.HTTP_201_CREATED
+            )
+
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+            return response
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -1,4 +1,5 @@
 {
-	"python.pythonPath": "C:\\Users\\julio\\AppData\\Local\\Programs\\Python\\Python36\\python.exe",
-	"python.jediEnabled": false
+	"python.pythonPath": "C:\\Users\\jambe\\.virtualenvs\\renty-nG3ha9Gj\\Scripts\\python.exe",
+	"python.jediEnabled": false,
+	"python.linting.pylintEnabled": true
 }
