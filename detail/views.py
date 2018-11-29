@@ -47,7 +47,7 @@ class CarView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+'''
     def post(self, request):
         serializer = CarSerializerToSave(data=request.data)
         if serializer.is_valid():
@@ -59,7 +59,7 @@ class CarView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+'''
 
 class CarSearchView(generics.ListAPIView):
     serializer_class = CarSearchSerializer
