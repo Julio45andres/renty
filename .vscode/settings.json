@@ -1,5 +1,5 @@
 {
-	"python.pythonPath": "/usr/bin/python3",
+	"python.pythonPath": "C:\\Users\\jambe\\.virtualenvs\\renty-nG3ha9Gj\\Scripts\\python.exe",
 	"python.jediEnabled": false,
 	"python.linting.pylintEnabled": true
 }

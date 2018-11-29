@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'detail.apps.DetailConfig',
     # Framework REST django
     'rest_framework',
+    'rest_framework_swagger',
     'corsheaders',
 ]
 

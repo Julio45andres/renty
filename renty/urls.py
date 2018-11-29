@@ -17,12 +17,21 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
 from detail import views
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='API Renty Docs')
+
 
 urlpatterns = [
     # path('', views.CarView.as_view()),
     path('admin/', admin.site.urls),
     url(r'^rentals/', views.RentalView.as_view()),
-    url(r'^cars/$', views.CarView.as_view()),
+    #url(r'^cars/$', views.CarView.as_view()),
     url(r'^cars/(?P<carid>[-\w]+)/$', views.CarView.as_view()),
-    url(r'^cars/search$', views.CarSearchView.as_view())
+    url(r'^cars/search$', views.CarSearchView.as_view()),
+    url(r'^docs/', schema_view)
+    #url(r'^cars/search$from=<from>&to=<to>&type=<type>&pickup=<pickup>', views.CarView.as_view()),
+    
 ]
+
+#https://renty-web.herokuapp.com/cars/search?from=2018-11-15&to=2018-11-17&type=lujo&pickup=aeropuerto
