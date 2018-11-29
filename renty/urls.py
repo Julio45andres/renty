@@ -29,8 +29,8 @@ urlpatterns = [
     #url(r'^cars/$', views.CarView.as_view()),
     url(r'^cars/(?P<carid>[-\w]+)/$', views.CarView.as_view()),
     url(r'^cars/search$', views.CarSearchView.as_view()),
-    url(r'^docs/', schema_view),
-    url(r'^cars/search$from=<from>&to=<to>&type=<type>&pickup=<pickup>', views.CarView.as_view()),
+    url(r'^docs/', schema_view)
+    #url(r'^cars/search$from=<from>&to=<to>&type=<type>&pickup=<pickup>', views.CarView.as_view()),
     
 ]
 
