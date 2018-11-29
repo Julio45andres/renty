@@ -128,5 +128,6 @@ dmypy.json
 
 .vscode/
 static/
+logfile
 detail/migrations/
 # End of https://www.gitignore.io/api/django
