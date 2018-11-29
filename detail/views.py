@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
-from .models import Rental, Car, Reservation
+from .models import CarRental, Car, Reservation
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
 from django.http import Http404
 from django.utils.dateparse import parse_datetime, parse_date
@@ -13,7 +13,7 @@ class RentalView(generics.ListAPIView):
     serializer_class = RentalSerializer
 
     def get_queryset(self):
-        queryset = Rental.objects.all()
+        queryset = CarRental.objects.all()
         return queryset
 
     def post(self, request):
