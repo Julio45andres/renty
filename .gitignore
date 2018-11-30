@@ -129,5 +129,5 @@ mydatabase
 static/
 logfile
 detail/migrations/
-search
+search/
 # End of https://www.gitignore.io/api/django
