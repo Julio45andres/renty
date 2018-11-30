@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
-from .models import CarRental, Car, Reservation
-from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
-from django.http import Http404
+from .models import CarRental, Car, CarRent
+from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
+from django.http import Http404, HttpResponse
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
 from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
 
 
 class RentalView(generics.ListAPIView):
@@ -48,6 +49,8 @@ class CarView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+'''
     def post(self, request):
         serializer = CarSerializerToSave(data=request.data)
         if serializer.is_valid():
@@ -59,6 +62,7 @@ class CarView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+'''
 
 
 class CarSearchView(generics.ListAPIView):
@@ -66,7 +70,7 @@ class CarSearchView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Car.objects.all()
-        reservatedCars = Reservation.objects.all()
+        reservatedCars = CarRent.objects.all()
         # type es una palabra reservada de python
         _type = self.request.query_params.get('type', None)
         pickup = self.request.query_params.get('pickup', None)
@@ -84,8 +88,9 @@ class CarSearchView(generics.ListAPIView):
             if _from > to:
                 raise Http404
             fromReservations = reservatedCars.filter(
-                fromDate__range=(_from, to))
-            toReservations = reservatedCars.filter(toDate__range=(_from, to))
+                pickupDate__range=(_from, to))
+            toReservations = reservatedCars.filter(
+                deliverDate__range=(_from, to))
             # Union
             reservatedCars = (fromReservations | toReservations).values('car')
             queryset = queryset.exclude(id__in=reservatedCars)
@@ -95,3 +100,75 @@ class CarSearchView(generics.ListAPIView):
 def _parse_date(date):
     parsed_date = parse_date(date)
     return parsed_date
+
+
+class ReservationList(generics.ListCreateAPIView):
+    serializer_class = ReservationSerializer
+
+    def get(self, request):
+        def message():
+            text = "hola mundo"
+        return Response("hola mundo")
+
+    def post(self, request):
+        #print("Request: "+ request.data)
+        # se obtiene la información
+        # información del usuario
+        # Esto debe cambiar al hacer la validación del usuario
+        token = request.POST.get('token')
+        print(token)
+        #token = request.POST['token']
+
+        uidUser = "uidUserTry"
+        print(uidUser)
+        # obtengo la información del auto a rentar
+        # car = get_object_or_404(Car, id=request.POST.get('carId')) #cambiar por carId
+        print("ahora a buscar auto")
+        cars = Car.objects.filter(id=request.POST.get('carId'))
+        car = cars[0]
+        print("se encontró auto")
+        print(car.id)
+        # obtengo la información de la empresa rentadora del auto
+        # rental = get_object_or_404(CarRental, id=request.POST.get('rentalId')) #cambiar por rentalId
+        print("Ahora a buscar rental")
+        #rentals = CarRental.objects.filter(id=request.POST.get('rentalId'))
+        #rental = rentals[0]
+        rental = car.rental
+        print("se encontró rental")
+        print(rental._id)
+
+        # obtengo el resto de información
+        # Fecha en la que se hizo la reserva
+        bookingDate = request.POST.get('bookingDate')
+        bookingDate = _parse_date(str(bookingDate))
+        # pickup
+        pickup = request.POST.get('pickup')
+        # fecha en la que se recoge el auto -comienza la renta-
+        pickupDate = request.POST.get('pickupDate')
+        pickupDate = _parse_date(str(pickupDate))
+        fromDate = pickupDate
+        # Lugar donde se entregará el auto cuando finalice la renta
+        deliverPlace = request.POST.get('deliverPlace')
+        # fecha en la que se entrega el auto -fin de la renta-
+        deliverDate = request.POST.get('deliverDate')
+        deliverDate = _parse_date(str(deliverDate))
+        toDate = deliverDate
+
+        # se crea el objeto a guardar
+        rent_saved = CarRent(
+            car=car,
+            fromDate=fromDate,
+            toDate=toDate,
+            token=token,
+            uidUser=uidUser,
+            bookingDate=bookingDate,
+            pickup=pickup,
+            pickupDate=pickupDate,
+            deliverPlace=deliverPlace,
+            deliverDate=deliverDate,
+            rental=rental
+        )
+        rent_saved.save()
+
+        # return
+        return rent_saved

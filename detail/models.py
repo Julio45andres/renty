@@ -33,8 +33,14 @@ class Car(Model):
     pictures = ArrayField(CharField(max_length=2083), blank=True, size=20)
 
 
-class Reservation(Model):
+class CarRent(Model):
     id = AutoField(primary_key=True)
     car = ForeignKey('Car', on_delete=CASCADE)
-    fromDate = DateField()
-    toDate = DateField()
+    token = CharField(default="defaultToke", max_length=100)
+    uidUser = CharField(default="defaultUidUser", max_length=100)
+    bookingDate = DateField()
+    pickup = CharField(default="Aeropuerto", max_length=100)
+    pickupDate = DateField()
+    deliverPlace = CharField(default="Aeropuerto", max_length=100)
+    deliverDate = DateField()
+    rental = ForeignKey('CarRental', on_delete=CASCADE, default=1)
