@@ -8,10 +8,13 @@ from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
+import firebase_admin
+from firebase_admin import credentials, auth
+
 
 
 class RentalView(generics.ListAPIView):
-    serializer_class = RentalSerializer
+    
 
     def get_queryset(self):
         queryset = CarRental.objects.all()
@@ -63,6 +66,32 @@ class CarView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 '''
+
+class ReservationView(APIView):
+    serializer_class = RentalSerializer
+    cred = credentials.Certificate('D:\\udeaprojects\\renty\\renty-python-firebase-adminsdk.json')
+    default_app = firebase_admin.initialize_app(cred)
+    def get(self, request):
+        try:
+            token = self.request.query_params.get('tokenId', None)
+            if token is not None:
+                decoded_token = auth.verify_id_token(token)
+                uid = decoded_token['uid']
+                data= {
+                    "uid": uid
+                }
+                return Response(data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as e:
+                data={
+                    "error": str(e)
+                }
+                return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+  
+
+
+
 
 
 class CarSearchView(generics.ListAPIView):
