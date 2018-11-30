@@ -157,8 +157,6 @@ class ReservationList(generics.ListCreateAPIView):
         # se crea el objeto a guardar
         rent_saved = CarRent(
             car=car,
-            fromDate=fromDate,
-            toDate=toDate,
             token=token,
             uidUser=uidUser,
             bookingDate=bookingDate,
