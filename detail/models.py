@@ -38,3 +38,15 @@ class Reservation(Model):
     car = ForeignKey('Car', on_delete=CASCADE)
     fromDate = DateField()
     toDate = DateField()
+    token = CharField(max_length=100)
+    uidUser = CharField(max_length=100)
+    #carId = CharField(max_length=10)
+    bookingDate = DateField()
+    pickup= CharField(max_length=100)
+    pickupDate = DateField()
+    deliverPlace = CharField(max_length=100)
+    deliverDate = DateField()
+    rental = ForeignKey('CarRental', on_delete=CASCADE)
+
+
+

@@ -2,12 +2,12 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import CarRental, Car, Reservation
-from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer
-from django.http import Http404
+from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
+from django.http import Http404, HttpResponse
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
 from django.views.decorators.http import require_http_methods
-
+from django.shortcuts import get_object_or_404
 
 class RentalView(generics.ListAPIView):
     serializer_class = RentalSerializer
@@ -35,7 +35,6 @@ def api_getto(request):
     response["Access-Control-Max-Age"] = "1000"
     response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
     return response
-
 
 class CarView(APIView):
     serializer_class = CarSerializer
@@ -95,3 +94,65 @@ class CarSearchView(generics.ListAPIView):
 def _parse_date(date):
     parsed_date = parse_date(date)
     return parsed_date
+
+
+class ReservationList(generics.ListCreateAPIView):
+        serializer_class = ReservationSerializer
+
+        def get(self, request):
+            def message():
+                text = "hola mundo"
+            return Response("hola mundo")
+
+        def post(self, request):
+            #print("Request: "+ request.data)
+            #se obtiene la información
+            #información del usuario
+            # Esto debe cambiar al hacer la validación del usuario
+            token = request.POST.get('token')
+            #token = request.POST['token']
+
+            uidUser = "uidUserTry"
+            #obtengo la información del auto a rentar
+            car = get_object_or_404(Car, id=request.POST.get('carId')) #cambiar por carId
+
+            #obtengo la información de la empresa rentadora del auto
+            rental = get_object_or_404(CarRental, id=request.POST.get('rentalId')) #cambiar por rentalId
+
+
+            #obtengo el resto de información
+            #Fecha en la que se hizo la reserva
+            bookingDate = request.POST.get('bookingDate')
+            bookingDate = _parse_date(str(bookingDate))
+            #pickup
+            pickup = request.POST.get('pickup')
+            #fecha en la que se recoge el auto -comienza la renta-
+            pickupDate = request.POST.get('pickupDate')
+            pickupDate = _parse_date(str(pickupDate))
+            _from = pickupDate
+            #Lugar donde se entregará el auto cuando finalice la renta
+            deliverPlace = request.POST.get('deliverPlace')
+            #fecha en la que se entrega el auto -fin de la renta-
+            deliverDate = request.POST.get('deliverDate')
+            deliverDate = _parse_date(str(deliverDate))
+            _to = deliverDate
+
+            #se crea el objeto a guardar
+            rent_saved = Reservation.objects.create(
+                token,
+                uidUser,
+                #car,
+                rental,
+                bookingDate,
+                pickup,
+                pickupDate,
+                _from,
+                deliverPlace,
+                deliverDate,
+                _to
+            )
+
+            #return
+            rent_saved
+
+
