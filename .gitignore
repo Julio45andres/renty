@@ -129,4 +129,5 @@ dmypy.json
 static/
 logfile
 detail/migrations/
+search/
 # End of https://www.gitignore.io/api/django

@@ -1,9 +1,5 @@
 from rest_framework import serializers
-<< << << < HEAD
 from .models import CarRental, Car, CarRent
-== == == =
-from .models import CarRental, Car, Rent
->>>>>> > 0202a114ee387e55c2d045d1477f247c555e2a2b
 from rest_framework.fields import ListField
 
 
@@ -77,7 +73,7 @@ class StringListField(serializers.ListField):
     child = serializers.CharField()
 
 
-class RentSerializer(serializers.HyperlinkedModelSerializer):
+class ReservationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CarRent
         fields = (
