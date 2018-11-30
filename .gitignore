@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/django
 
 ### Django ###
@@ -123,11 +122,12 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+mydatabase
 # vscode
 
 .vscode/
 static/
 logfile
 detail/migrations/
+search
 # End of https://www.gitignore.io/api/django
