@@ -77,7 +77,7 @@ class ReservationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CarRent
         fields = (
-            'id',
+            'bookingId',
             'token',
             'car',
             'bookingDate',
