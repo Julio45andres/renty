@@ -110,14 +110,26 @@ class ReservationList(generics.ListCreateAPIView):
             #información del usuario
             # Esto debe cambiar al hacer la validación del usuario
             token = request.POST.get('token')
+            print(token)
             #token = request.POST['token']
 
             uidUser = "uidUserTry"
+            print(uidUser)
             #obtengo la información del auto a rentar
-            car = get_object_or_404(Car, id=request.POST.get('carId')) #cambiar por carId
-
+            #car = get_object_or_404(Car, id=request.POST.get('carId')) #cambiar por carId
+            print("ahora a buscar auto")
+            cars = Car.objects.filter(id=request.POST.get('carId'))
+            car = cars[0]
+            print("se encontró auto")
+            print(car.id)
             #obtengo la información de la empresa rentadora del auto
-            rental = get_object_or_404(CarRental, id=request.POST.get('rentalId')) #cambiar por rentalId
+            #rental = get_object_or_404(CarRental, id=request.POST.get('rentalId')) #cambiar por rentalId
+            print("Ahora a buscar rental")
+            #rentals = CarRental.objects.filter(id=request.POST.get('rentalId'))
+            #rental = rentals[0]
+            rental = car.rental
+            print("se encontró rental")
+            print(rental._id)
 
 
             #obtengo el resto de información
@@ -129,30 +141,31 @@ class ReservationList(generics.ListCreateAPIView):
             #fecha en la que se recoge el auto -comienza la renta-
             pickupDate = request.POST.get('pickupDate')
             pickupDate = _parse_date(str(pickupDate))
-            _from = pickupDate
+            fromDate = pickupDate
             #Lugar donde se entregará el auto cuando finalice la renta
             deliverPlace = request.POST.get('deliverPlace')
             #fecha en la que se entrega el auto -fin de la renta-
             deliverDate = request.POST.get('deliverDate')
             deliverDate = _parse_date(str(deliverDate))
-            _to = deliverDate
+            toDate = deliverDate
 
             #se crea el objeto a guardar
-            rent_saved = Reservation.objects.create(
-                token,
-                uidUser,
-                #car,
-                rental,
-                bookingDate,
-                pickup,
-                pickupDate,
-                _from,
-                deliverPlace,
-                deliverDate,
-                _to
+            rent_saved = Reservation(
+                car = car,
+                fromDate = fromDate,
+                toDate = toDate,
+                token = token,
+                uidUser = uidUser,
+                bookingDate=bookingDate,
+                pickup = pickup,
+                pickupDate = pickupDate,
+                deliverPlace = deliverPlace,
+                deliverDate = deliverDate,
+                rental = rental
             )
+            rent_saved.save()
 
             #return
-            rent_saved
+            return rent_saved
 
 
