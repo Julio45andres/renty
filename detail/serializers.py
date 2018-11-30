@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CarRental, Car, Reservation
+from .models import CarRental, Car, Rent
 from rest_framework.fields import ListField
 
 
@@ -73,9 +73,9 @@ class StringListField(serializers.ListField):
     child = serializers.CharField()
 
 
-class ReservationSerializer(serializers.HyperlinkedModelSerializer):
+class RentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Reservation
+        model = Rent
         fields = (
             'id',
             'token',

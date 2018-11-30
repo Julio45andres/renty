@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
-from .models import CarRental, Car, Reservation
-from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
+from .models import CarRental, Car, Reservation, Rent
+from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, RentSerializer
 from django.http import Http404, HttpResponse
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
@@ -97,7 +97,7 @@ def _parse_date(date):
 
 
 class ReservationList(generics.ListCreateAPIView):
-        serializer_class = ReservationSerializer
+        serializer_class = RentSerializer
 
         def get(self, request):
             def message():
@@ -141,19 +141,15 @@ class ReservationList(generics.ListCreateAPIView):
             #fecha en la que se recoge el auto -comienza la renta-
             pickupDate = request.POST.get('pickupDate')
             pickupDate = _parse_date(str(pickupDate))
-            fromDate = pickupDate
             #Lugar donde se entregará el auto cuando finalice la renta
             deliverPlace = request.POST.get('deliverPlace')
             #fecha en la que se entrega el auto -fin de la renta-
             deliverDate = request.POST.get('deliverDate')
             deliverDate = _parse_date(str(deliverDate))
-            toDate = deliverDate
 
             #se crea el objeto a guardar
-            rent_saved = Reservation(
+            rent_saved = Rent(
                 car = car,
-                fromDate = fromDate,
-                toDate = toDate,
                 token = token,
                 uidUser = uidUser,
                 bookingDate=bookingDate,
@@ -165,7 +161,7 @@ class ReservationList(generics.ListCreateAPIView):
             )
             rent_saved.save()
 
-            #return
+            #response
             return rent_saved
 
 
