@@ -36,7 +36,7 @@ class Car(Model):
 class CarRent(Model):
     id = AutoField(primary_key=True)
     car = ForeignKey('Car', on_delete=CASCADE)
-    token = CharField(default="defaultToke", max_length=2000)
+    token = CharField(default="defaultToke", max_length=3000)
     uidUser = CharField(default="defaultUidUser", max_length=2000)
     bookingDate = DateField()
     pickup = CharField(default="Aeropuerto", max_length=100)
