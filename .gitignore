@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/django
 
 ### Django ###
@@ -126,9 +125,8 @@ dmypy.json
 
 # vscode
 
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/
+static/
+logfile
+detail/migrations/
 # End of https://www.gitignore.io/api/django
