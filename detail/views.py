@@ -169,4 +169,5 @@ class ReservationList(generics.ListCreateAPIView):
         rent_saved.save()
 
         # return
-        return rent_saved
+        #serializer = ReservationSerializer(rent_saved.save().data)
+        return Response(rent_saved)
