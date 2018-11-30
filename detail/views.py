@@ -148,25 +148,20 @@ class ReservationList(generics.ListCreateAPIView):
         print(token)
         # token = request.POST['token']
 
-        uidUser = "uidUserTry"
+        uidUser = takeUid(token)
+        if uidUser is None :
+            error = {
+                "error": "Token invalido"
+            }
+            return Response(error, status=status.HTTP_401_UNAUTHORIZED)
+
         print(uidUser)
-        # obtengo la información del auto a rentar
-        # car = get_object_or_404(Car, id=request.POST.get('carId')) #cambiar por carId
-        print("ahora a buscar auto")
+        # se obtiene la información del auto a rentar
         cars = Car.objects.filter(id=request.POST.get('carId'))
         car = cars[0]
-        print("se encontró auto")
-        print(car.id)
-        # obtengo la información de la empresa rentadora del auto
-        # rental = get_object_or_404(CarRental, id=request.POST.get('rentalId')) #cambiar por rentalId
-        print("Ahora a buscar rental")
-        # rentals = CarRental.objects.filter(id=request.POST.get('rentalId'))
-        # rental = rentals[0]
+        # se obitene la información de la empresa rentadora del auto
         rental = car.rental
-        print("se encontró rental")
-        print(rental._id)
-
-        # obtengo el resto de información
+        # se obtiene el resto de información
         # Fecha en la que se hizo la reserva
         bookingDate = request.POST.get('bookingDate')
         bookingDate = _parse_date(str(bookingDate))
@@ -175,13 +170,11 @@ class ReservationList(generics.ListCreateAPIView):
         # fecha en la que se recoge el auto -comienza la renta-
         pickupDate = request.POST.get('pickupDate')
         pickupDate = _parse_date(str(pickupDate))
-        fromDate = pickupDate
         # Lugar donde se entregará el auto cuando finalice la renta
         deliverPlace = request.POST.get('deliverPlace')
         # fecha en la que se entrega el auto -fin de la renta-
         deliverDate = request.POST.get('deliverDate')
         deliverDate = _parse_date(str(deliverDate))
-        toDate = deliverDate
 
         # se crea el objeto a guardar
         rent_saved = CarRent(
@@ -195,8 +188,44 @@ class ReservationList(generics.ListCreateAPIView):
             deliverDate=deliverDate,
             rental=rental
         )
+        #se guarda el objeto
         rent_saved.save()
 
-        # return
-        #serializer = ReservationSerializer(rent_saved.save().data)
-        return Response(rent_saved)
+        try:
+            rent_saved.save()
+            print(rent_saved.id)
+            if rent_saved.id is not None:
+                data = {
+                    "statusCode":200
+                }
+                return Response(data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            """ data = {
+                "bookingId":rent_saved.id,
+                "car":rent_saved.car,
+                "token":rent_saved.token,
+                "uidUser":rent_saved.uidUser,
+                "bookingDate":rent_saved.bookingDate,
+                "pickup":rent_saved.pickup,
+                "pickupDate":rent_saved.pickupDate,
+                "deliverPlace":rent_saved.deliverPlace,
+                "deliverDate":rent_saved.deliverDate,
+                "rental":rent_saved.rental
+            } """
+            #return Response(status=status.HTTP_201_CREATED)
+            
+        except ValueError as e:
+            data = {
+                "error": str(e)
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+
+def takeUid(token):
+    try:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+        return uid
+    except ValueError as a:
+        return None
