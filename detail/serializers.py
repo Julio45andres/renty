@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CarRental, Car, Reservation
+from .models import CarRental, Car, CarRent
 from rest_framework.fields import ListField
 
 
@@ -75,7 +75,7 @@ class StringListField(serializers.ListField):
 
 class ReservationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Reservation
+        model = CarRent
         fields = (
             'id',
             'token',
@@ -87,3 +87,7 @@ class ReservationSerializer(serializers.HyperlinkedModelSerializer):
             'deliverDate',
             'rental'
         )
+
+
+ReservationSerializer._declared_fields["bookingId"] = serializers.IntegerField(
+    source="id")

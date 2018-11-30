@@ -1,5 +1,5 @@
 {
-	"python.pythonPath": "C:\\Users\\jambe\\.virtualenvs\\renty-nG3ha9Gj\\Scripts\\python.exe",
+	"python.pythonPath": "/home/julio/.local/share/virtualenvs/renty-aK9RV56k/bin/python",
 	"python.jediEnabled": false,
 	"python.linting.pylintEnabled": true
 }
