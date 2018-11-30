@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^booking/', views.ReservationList.as_view()),
     #url(r'^cars/search$from=<from>&to=<to>&type=<type>&pickup=<pickup>', views.CarView.as_view()),
     
+    url(r'^cars/token$', views.ReservationView.as_view())
 ]
 
 #https://renty-web.herokuapp.com/cars/search?from=2018-11-15&to=2018-11-17&type=lujo&pickup=aeropuerto
