@@ -25,13 +25,17 @@ class Migration(migrations.Migration):
                 ('model', models.CharField(max_length=50)),
                 ('pickup', models.CharField(default='Aeropuerto', max_length=100)),
                 ('plate', models.IntegerField()),
-                ('rating', models.IntegerField(default=0, validators=[django.core.validators.MaxValueValidator(5), django.core.validators.MinValueValidator(0)])),
+                ('rating', models.IntegerField(default=0, validators=[
+                 django.core.validators.MaxValueValidator(5), django.core.validators.MinValueValidator(0)])),
                 ('capacity', models.IntegerField(default=1)),
-                ('transmission', models.CharField(default='Mecanica', max_length=20)),
-                ('doors', models.IntegerField(default=1, validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(7)])),
+                ('transmission', models.CharField(
+                    default='Mecanica', max_length=20)),
+                ('doors', models.IntegerField(default=1, validators=[
+                 django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(7)])),
                 ('color', models.CharField(max_length=20)),
                 ('kms', models.IntegerField(default=0)),
-                ('pictures', django.contrib.postgres.fields.ArrayField(base_field=models.CharField(max_length=2083), blank=True, size=20)),
+                ('pictures', django.contrib.postgres.fields.ArrayField(
+                    base_field=models.CharField(max_length=2083), blank=True, size=20)),
             ],
         ),
         migrations.CreateModel(
@@ -46,17 +50,30 @@ class Migration(migrations.Migration):
             name='Rent',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
+                << << << < HEAD
                 ('fromDate', models.DateField()),
                 ('toDate', models.DateField()),
                 ('token', models.CharField(default='defaultToke', max_length=100)),
-                ('uidUser', models.CharField(default='defaultUidUser', max_length=100)),
+                == == == =
+                ('token', models.CharField(default='defaultToken', max_length=100)),
+                >>>>>> > 0202a114ee387e55c2d045d1477f247c555e2a2b
+                ('uidUser', models.CharField(
+                    default='defaultUidUser', max_length=100)),
                 ('bookingDate', models.DateField()),
                 ('pickup', models.CharField(default='Aeropuerto', max_length=100)),
                 ('pickupDate', models.DateField()),
-                ('deliverPlace', models.CharField(default='Aeropuerto', max_length=100)),
+                ('deliverPlace', models.CharField(
+                    default='Aeropuerto', max_length=100)),
                 ('deliverDate', models.DateField()),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='detail.Car')),
-                ('rental', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='detail.CarRental')),
+                ('car', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='detail.Car')),
+                << << << < HEAD
+                ('rental', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='detail.CarRental')),
+                == == == =
+                ('rental', models.ForeignKey(
+                    default=1, on_delete=django.db.models.deletion.CASCADE, to='detail.CarRental')),
+                >>>>>> > 0202a114ee387e55c2d045d1477f247c555e2a2b
             ],
         ),
         migrations.CreateModel(
@@ -66,19 +83,24 @@ class Migration(migrations.Migration):
                 ('fromDate', models.DateField()),
                 ('toDate', models.DateField()),
                 ('token', models.CharField(default='defaultToke', max_length=100)),
-                ('uidUser', models.CharField(default='defaultUidUser', max_length=100)),
+                ('uidUser', models.CharField(
+                    default='defaultUidUser', max_length=100)),
                 ('bookingDate', models.DateField()),
                 ('pickup', models.CharField(default='Aeropuerto', max_length=100)),
                 ('pickupDate', models.DateField()),
-                ('deliverPlace', models.CharField(default='Aeropuerto', max_length=100)),
+                ('deliverPlace', models.CharField(
+                    default='Aeropuerto', max_length=100)),
                 ('deliverDate', models.DateField()),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='detail.Car')),
-                ('rental', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='detail.CarRental')),
+                ('car', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='detail.Car')),
+                ('rental', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='detail.CarRental')),
             ],
         ),
         migrations.AddField(
             model_name='car',
             name='rental',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='detail.CarRental'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='detail.CarRental'),
         ),
     ]
