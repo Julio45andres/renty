@@ -130,14 +130,31 @@ def _parse_date(date):
     parsed_date = parse_date(date)
     return parsed_date
 
+class GetReservationList(generics.ListCreateAPIView):
+    serializer_class = ReservationSerializer
+
+    def get(self, request, token, format=None):
+        if token is not None:
+            uidUser = takeUid(token)
+            if uidUser is None :
+                error = {
+                    "error": "Token invalido"
+                }
+                return Response(error, status=status.HTTP_401_UNAUTHORIZED)
+
+            rents = CarRent.objects.filter(uidUser=uidUser)
+            return Response(rents, status=status.HTTP_200_OK)
+            #serializer = CarSerializer(cars[0], many=False)
+            #return Response(serializer.data)
+        else:
+            error={
+                "error": "Token None"
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ReservationList(generics.ListCreateAPIView):
     serializer_class = ReservationSerializer
-
-    def get(self, request):
-        def message():
-            text = "hola mundo"
-        return Response("hola mundo")
 
     def post(self, request):
         # print("Request: "+ request.data)
@@ -200,7 +217,7 @@ class ReservationList(generics.ListCreateAPIView):
                 }
                 return Response(data, status=status.HTTP_201_CREATED)
             else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             """ data = {
                 "bookingId":rent_saved.id,
                 "car":rent_saved.car,

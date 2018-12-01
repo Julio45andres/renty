@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^cars/search$', views.CarSearchView.as_view()),
     url(r'^docs/', schema_view),
     url(r'^booking/', views.ReservationList.as_view()),
+    url(r'^booking/(?P<token>[-\w]+)/$', views.GetReservationList.as_view()),
     #url(r'^cars/search$from=<from>&to=<to>&type=<type>&pickup=<pickup>', views.CarView.as_view()),
     
     url(r'^cars/token$', views.ReservationView.as_view())
