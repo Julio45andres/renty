@@ -120,8 +120,13 @@ class CarSearchView(generics.ListAPIView):
                 pickupDate__range=(_from, to))
             toReservations = reservatedCars.filter(
                 deliverDate__range=(_from, to))
+            betweenReservations = reservatedCars.filter(
+                pickupDate__lte=_from,
+                deliverDate__gte=to
+            )
             # Union
-            reservatedCars = (fromReservations | toReservations).values('car')
+            reservatedCars = (fromReservations | toReservations |
+                              betweenReservations).values('car')
             queryset = queryset.exclude(id__in=reservatedCars)
         return queryset
 
