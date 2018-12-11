@@ -5,8 +5,8 @@ import json
 from rest_framework import status
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import CarRent, Car, CarRental
-from .serializers import CarSearchSerializer
+from ..models import CarRent, Car, CarRental
+from ..serializers import CarSearchSerializer
 
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
