@@ -5,7 +5,6 @@ API REST para reserva de automóviles.
 Funcionalidades:
 
 Para buscar un auto individual por id: \
-
 https://renty-web.herokuapp.com/cars/{id} \
 https://renty-web.herokuapp.com/cars/3
 
