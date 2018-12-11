@@ -17,3 +17,15 @@ DATABASES = {
         'PORT': '5436',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'renty_test',
+#         'USER': 'julio45',
+#         'PASSWORD': 'renty',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }

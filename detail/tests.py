@@ -19,10 +19,8 @@ class BookingTest(TestCase):
     """ Test module for booking model """
 
     def setUp(self):
-		pictures = [
-            "https://c1.staticflickr.com/9/8728/16671205057_889930d3c0_b.jpg",
-            "http://www.mansory.com/files/styles/mansory_range_overview_main/public/media/cars/bugatti_veyron_16.4/linea_vivere/MANSORY_vivere_ext_06.jpg?itok=oDKbqzwI"
-        ]
+        pictures = ["https://c1.staticflickr.com/9/8728/16671205057_889930d3c0_b.jpg",
+                    "http://www.mansory.com/files/styles/mansory_range_overview_main/public/media/cars/bugatti_veyron_16.4/linea_vivere/MANSORY_vivere_ext_06.jpg?itok=oDKbqzwI"]
         rental = CarRental.objects.create(_id=1, name="f")
         car1 = Car.objects.create(brand="ff", thumbnail="ff", price=3, category="SUV",
                                   model="2019", pickup="Aeropuerto", rental=rental, plate=23, rating=3, capacity=4, transmission="Mecanica", doors=5, color="Azul", kms=1, pictures=pictures)
