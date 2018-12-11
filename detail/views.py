@@ -8,6 +8,8 @@ from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
+import firebase_admin
+from firebase_admin import credentials, auth
 
 
 class RentalView(generics.ListAPIView):
@@ -63,6 +65,33 @@ class CarView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 '''
+import os.path
+
+
+class ReservationView(APIView):
+    serializer_class = RentalSerializer
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    cred = credentials.Certificate(os.path.join(
+        my_path, "../renty-python-firebase-adminsdk.json"))
+    default_app = firebase_admin.initialize_app(cred)
+
+    def get(self, request):
+        try:
+            token = self.request.query_params.get('tokenId', None)
+            if token is not None:
+                decoded_token = auth.verify_id_token(token)
+                uid = decoded_token['uid']
+                data = {
+                    "uid": uid
+                }
+                return Response(data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as e:
+            data = {
+                "error": str(e)
+            }
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class CarSearchView(generics.ListAPIView):
@@ -111,13 +140,13 @@ class ReservationList(generics.ListCreateAPIView):
         return Response("hola mundo")
 
     def post(self, request):
-        #print("Request: "+ request.data)
+        # print("Request: "+ request.data)
         # se obtiene la información
         # información del usuario
         # Esto debe cambiar al hacer la validación del usuario
         token = request.POST.get('token')
         print(token)
-        #token = request.POST['token']
+        # token = request.POST['token']
 
         uidUser = "uidUserTry"
         print(uidUser)
@@ -131,8 +160,8 @@ class ReservationList(generics.ListCreateAPIView):
         # obtengo la información de la empresa rentadora del auto
         # rental = get_object_or_404(CarRental, id=request.POST.get('rentalId')) #cambiar por rentalId
         print("Ahora a buscar rental")
-        #rentals = CarRental.objects.filter(id=request.POST.get('rentalId'))
-        #rental = rentals[0]
+        # rentals = CarRental.objects.filter(id=request.POST.get('rentalId'))
+        # rental = rentals[0]
         rental = car.rental
         print("se encontró rental")
         print(rental._id)
@@ -157,8 +186,6 @@ class ReservationList(generics.ListCreateAPIView):
         # se crea el objeto a guardar
         rent_saved = CarRent(
             car=car,
-            fromDate=fromDate,
-            toDate=toDate,
             token=token,
             uidUser=uidUser,
             bookingDate=bookingDate,

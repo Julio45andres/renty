@@ -3,7 +3,9 @@ import os
 import sys
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'renty.settings')
+    test_settings = 'renty.test_settings'
+    settings = test_settings if 'test' in sys.argv else 'renty.settings'
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings)
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
