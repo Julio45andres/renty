@@ -1,6 +1,6 @@
 [ ![Codeship Status for Julio45andres/renty](https://app.codeship.com/projects/3d705970-d665-0136-1655-5a1a4afb2c37/status?branch=master)](https://app.codeship.com/projects/316959)
 
-======
+---
 
 # Aplicación Renty DoD - Desarrollo de aplicaciones empresariales 2018
 
