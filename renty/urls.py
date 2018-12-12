@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^cars/(?P<carid>[-\w]+)/$', views.CarView.as_view()),
     url(r'^cars/search$', views.CarSearchView.as_view(), name='car-search'),
     url(r'^docs/', schema_view),
-    url(r'^booking/', views.ReservationList.as_view()),
+    url(r'^booking/', views.ReservationList.as_view(), name='get_post_bookings'),
     # url(r'^cars/search$from=<from>&to=<to>&type=<type>&pickup=<pickup>', views.CarView.as_view()),
 
     url(r'^cars/token$', views.ReservationView.as_view())

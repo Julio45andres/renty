@@ -154,7 +154,7 @@ class ReservationList(generics.ListCreateAPIView):
         # token = request.POST['token']
 
         uidUser = takeUid(token)
-        if uidUser is None :
+        if uidUser is None:
             error = {
                 "error": "Token invalido"
             }
@@ -193,7 +193,7 @@ class ReservationList(generics.ListCreateAPIView):
             deliverDate=deliverDate,
             rental=rental
         )
-        #se guarda el objeto
+        # se guarda el objeto
         rent_saved.save()
 
         try:
@@ -201,7 +201,7 @@ class ReservationList(generics.ListCreateAPIView):
             print(rent_saved.id)
             if rent_saved.id is not None:
                 data = {
-                    "statusCode":200
+                    "statusCode": 200
                 }
                 return Response(data, status=status.HTTP_201_CREATED)
             else:
@@ -218,8 +218,8 @@ class ReservationList(generics.ListCreateAPIView):
                 "deliverDate":rent_saved.deliverDate,
                 "rental":rent_saved.rental
             } """
-            #return Response(status=status.HTTP_201_CREATED)
-            
+            # return Response(status=status.HTTP_201_CREATED)
+
         except ValueError as e:
             data = {
                 "error": str(e)

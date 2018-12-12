@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-# Create your tests here.
 import json
 from rest_framework import status
 from django.test import TestCase, Client
@@ -15,8 +14,8 @@ from datetime import datetime, date
 client = Client()
 
 
-class SearchTest(TestCase):
-    """ Test module for booking model """
+class BaseTestCase(TestCase):
+    """ Test module for search feature """
 
     def setUp(self):
         pictures = ["https://c1.staticflickr.com/9/8728/16671205057_889930d3c0_b.jpg",
@@ -42,6 +41,13 @@ class SearchTest(TestCase):
             deliverDate=_parse_date("2018-12-5"),
             rental=rental
         )
+
+
+class SearchTest(BaseTestCase):
+    """ Test module for search feature """
+
+    def setUp(self):
+        super(SearchTest, self).setUp()
 
     def test_whenSearchingCar1WithLowerBoundConflict_expect_car1IsNotAvailable(self):
         # get API response

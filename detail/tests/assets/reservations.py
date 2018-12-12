@@ -1,0 +1,12 @@
+import json
+
+
+car1Dict = {
+    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwOTBjZGI5MmIzOTZiNTQyM2JhYjYyOWM5ZTk4MmFkYzIxYmQxMTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVudHktdnVlIiwiYXVkIjoicmVudHktdnVlIiwiYXV0aF90aW1lIjoxNTQ0NTg5ODYwLCJ1c2VyX2lkIjoiTERGaTVaZ2VSYWdCVGEzQWlHTWZKbEl4WmdkMiIsInN1YiI6IkxERmk1WmdlUmFnQlRhM0FpR01mSmxJeFpnZDIiLCJpYXQiOjE1NDQ1ODk4NjEsImV4cCI6MTU0NDU5MzQ2MSwiZW1haWwiOiJqdWxpYW4ubXVub3ptQHVkZWEuZWR1LmNvIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImp1bGlhbi5tdW5vem1AdWRlYS5lZHUuY28iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.jftAjnv6Xu72YeRiIKcke78X7cvIPWn2wG-TZpy5NghYjFonjf-v4-0JqeJL3Lrx1FlLQVrcFCrCuFf9GMAtJuoRM3OXxgjINUsVm-CN3lsRjo9zhEJfVvIqx6ZzBSZjG0bogq1GswVZbgQAR9yUqxifGugmGwm-QwzK0tMGy0kIgVl_K1U-jSpMNhFd8_EaluoOa0u-hgt_92uVisG3C-FfYLeUB0LK5R8zD-yQ6Ep4TQWKaOjK_htztUN5xdh1a-vQ2GEdRUWxNVa2z0Mg_zOKh0Dzv9TKBy9JXz_j_g-xEiWm9tdXsgUMSEdCpIAIOrEMjcegFgg76_V1-Lgn5g",
+    "carId": 1,
+    "bookingDate": "2018-10-12",
+    "pickup": "MDE",
+    "pickupDate": "2018-10-13",
+    "deliverPlace": "El poblado",
+    "deliverDate": "2018-10-15"
+}
