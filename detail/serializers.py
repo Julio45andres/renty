@@ -94,24 +94,3 @@ class ReservationSerializer(serializers.HyperlinkedModelSerializer):
 ReservationSerializer._declared_fields["bookingId"] = serializers.IntegerField(
     source="id")
 
-
-class GetReservationSerializer(serializers.HyperlinkedModelSerializer):
-    car = CarSerializer(read_only=True)
-    rental = RentalSerializer(read_only=True)
-
-    class Meta:
-        model = CarRent
-        fields = (
-            'bookingId',
-            'car',
-            'bookingDate',
-            'pickup',
-            'pickupDate',
-            'deliverPlace',
-            'deliverDate',
-            'rental'
-        )
-
-
-GetReservationSerializer._declared_fields["bookingId"] = serializers.IntegerField(
-    source="id")
