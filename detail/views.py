@@ -68,7 +68,7 @@ class CarView(APIView):
 import os.path
 
 
-class ReservationView(APIView):
+""" class ReservationView(APIView):
     serializer_class = RentalSerializer
     my_path = os.path.abspath(os.path.dirname(__file__))
     cred = credentials.Certificate(os.path.join(
@@ -91,7 +91,8 @@ class ReservationView(APIView):
             data = {
                 "error": str(e)
             }
-            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED) 
+ """
 
 
 class CarSearchView(generics.ListAPIView):
@@ -138,11 +139,42 @@ def _parse_date(date):
 
 class ReservationList(generics.ListCreateAPIView):
     serializer_class = ReservationSerializer
+    lookup_url_kwarg = "token"
 
-    def get(self, request):
-        def message():
-            text = "hola mundo"
-        return Response("hola mundo")
+    def get_queryset(self):
+        token = self.kwargs.get(self.lookup_url_kwarg)
+        print("token: "+token)
+        rents = CarRent.objects.all()
+        if token is not None:
+            uidUser = takeUid(token)
+            if uidUser is not None:
+                rents = rents.filter(uidUser=uidUser)
+                return rents
+            else:
+                print("Token invalido")
+        else:
+            print("token none")
+        #serializer = ReservationSerializer(rents)
+        # print(rents[0].car.id)
+
+        # return Response( status=status.HTTP_200_OK)
+
+        """ if token is not None:
+            uidUser = takeUid(token)
+            if uidUser is None :
+                error = {
+                    "error": "Token invalido"
+                }
+                return Response(error, status=status.HTTP_401_UNAUTHORIZED)
+            rents = CarRent.objects.filter(uidUser=uidUser)
+            return Response(rents, status=status.HTTP_200_OK)
+            #serializer = CarSerializer(cars[0], many=False)
+            #return Response(serializer.data)
+        else:
+            error={
+                "error": "Token None"
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST) """
 
     def post(self, request):
         # print("Request: "+ request.data)
@@ -160,7 +192,7 @@ class ReservationList(generics.ListCreateAPIView):
             }
             return Response(error, status=status.HTTP_401_UNAUTHORIZED)
 
-        print(uidUser)
+        print("uidUser: "+uidUser)
         # se obtiene la información del auto a rentar
         cars = Car.objects.filter(id=request.POST.get('carId'))
         car = cars[0]
@@ -182,9 +214,10 @@ class ReservationList(generics.ListCreateAPIView):
         deliverDate = _parse_date(str(deliverDate))
 
         # se crea el objeto a guardar
+        print("A guardar en base de datos")
         rent_saved = CarRent(
             car=car,
-            token=token,
+            token=uidUser,
             uidUser=uidUser,
             bookingDate=bookingDate,
             pickup=pickup,
@@ -193,6 +226,7 @@ class ReservationList(generics.ListCreateAPIView):
             deliverDate=deliverDate,
             rental=rental
         )
+        print("Se gurdó en la base de datos")
         # se guarda el objeto
         rent_saved.save()
 
@@ -205,7 +239,7 @@ class ReservationList(generics.ListCreateAPIView):
                 }
                 return Response(data, status=status.HTTP_201_CREATED)
             else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             """ data = {
                 "bookingId":rent_saved.id,
                 "car":rent_saved.car,
@@ -226,11 +260,35 @@ class ReservationList(generics.ListCreateAPIView):
             }
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request):
+        # delete an object and send a confirmation response
+        token = request.POST.get('token')
+        print("token: "+token)
+        uidUser = takeUid(token)
+        if uidUser is not None:
+            # se elimina el dato
+            print("uidUSer: "+uidUser)
+            bookingId = request.POST.get('bookingId')
+            CarRent.objects.get(id=bookingId).delete()
+            return Response("ok")
+        else:
+            error = {
+                "error": "Token invalido"
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+
 
 def takeUid(token):
+    #serializer_class = RentalSerializer
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    cred = credentials.Certificate(os.path.join(
+        my_path, "../renty-python-firebase-adminsdk.json"))
+    default_app = firebase_admin.initialize_app(cred)
+
     try:
         decoded_token = auth.verify_id_token(token)
         uid = decoded_token['uid']
         return uid
     except ValueError as a:
+        print(a)
         return None
