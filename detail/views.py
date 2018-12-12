@@ -141,8 +141,7 @@ class ReservationList(generics.ListCreateAPIView):
     lookup_url_kwarg="token"
 
     def get_queryset(self):
-        #token = self.kwargs.get(self.lookup_url_kwarg)
-        token = self.request.query_params.get('token', None)
+        token = self.kwargs.get(self.lookup_url_kwarg)
         print("token: "+token)
         rents = CarRent.objects.all()
         if token is not None:
