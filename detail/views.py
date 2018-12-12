@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import CarRental, Car, CarRent
-from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
+from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer, GetReservationSerializer
 from django.http import Http404, HttpResponse
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
@@ -68,7 +68,7 @@ class CarView(APIView):
 import os.path
 
 
-class ReservationView(APIView):
+""" class ReservationView(APIView):
     serializer_class = RentalSerializer
     my_path = os.path.abspath(os.path.dirname(__file__))
     cred = credentials.Certificate(os.path.join(
@@ -91,7 +91,7 @@ class ReservationView(APIView):
             data = {
                 "error": str(e)
             }
-            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED) """
 
 
 class CarSearchView(generics.ListAPIView):
@@ -130,31 +130,35 @@ def _parse_date(date):
     parsed_date = parse_date(date)
     return parsed_date
 
-class GetReservationList(generics.ListCreateAPIView):
-    serializer_class = ReservationSerializer
-
-    def get(self, request, token, format=None):
-        if token is not None:
-            uidUser = takeUid(token)
-            if uidUser is None :
-                error = {
-                    "error": "Token invalido"
-                }
-                return Response(error, status=status.HTTP_401_UNAUTHORIZED)
-
-            rents = CarRent.objects.filter(uidUser=uidUser)
-            return Response(rents, status=status.HTTP_200_OK)
-            #serializer = CarSerializer(cars[0], many=False)
-            #return Response(serializer.data)
-        else:
-            error={
-                "error": "Token None"
-            }
-            return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReservationList(generics.ListCreateAPIView):
     serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        token = self.kwargs.get(self.lookup_url_kwarg)
+        print("Token:"+token)
+        if token is not None:
+            uidUser = takeUid(token)
+            print("uidUser:"+uidUser)
+            if uidUser is not None :
+                rents = CarRent.objects.filter(uidUser=uidUser)
+                return rents
+
+                """ error = [{
+                    "error": "Token invalido"
+                }]
+                return error
+                """
+            """ rents = CarRent.objects.filter(uidUser=uidUser)
+            return rents """
+            #serializer = CarSerializer(cars[0], many=False)
+            #return Response(serializer.data)
+        """ else:
+            error=[{
+                "error": "No token"
+            }]
+            return error """
 
     def post(self, request):
         # print("Request: "+ request.data)
@@ -172,7 +176,7 @@ class ReservationList(generics.ListCreateAPIView):
             }
             return Response(error, status=status.HTTP_401_UNAUTHORIZED)
 
-        print(uidUser)
+        print("uidUser: "+uidUser)
         # se obtiene la información del auto a rentar
         cars = Car.objects.filter(id=request.POST.get('carId'))
         car = cars[0]
@@ -194,9 +198,10 @@ class ReservationList(generics.ListCreateAPIView):
         deliverDate = _parse_date(str(deliverDate))
 
         # se crea el objeto a guardar
+        print("A guardar en base de datos")
         rent_saved = CarRent(
             car=car,
-            token=token,
+            token=uidUser,
             uidUser=uidUser,
             bookingDate=bookingDate,
             pickup=pickup,
@@ -205,6 +210,7 @@ class ReservationList(generics.ListCreateAPIView):
             deliverDate=deliverDate,
             rental=rental
         )
+        print("Se gurdó en la base de datos")
         #se guarda el objeto
         rent_saved.save()
 
