@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import CarRental, Car, CarRent
-from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
+from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer, DeleteReservationSerializer
 from django.http import Http404, HttpResponse
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
@@ -10,7 +10,6 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
 import firebase_admin
 from firebase_admin import credentials, auth
-
 
 class RentalView(generics.ListAPIView):
     serializer_class = RentalSerializer
@@ -68,16 +67,20 @@ class CarView(APIView):
 import os.path
 
 
-""" class ReservationView(APIView):
+
+
+
+class ReservationView(APIView):
     serializer_class = RentalSerializer
     my_path = os.path.abspath(os.path.dirname(__file__))
     cred = credentials.Certificate(os.path.join(
         my_path, "../renty-python-firebase-adminsdk.json"))
     default_app = firebase_admin.initialize_app(cred)
 
+
     def get(self, request):
         try:
-            token = self.request.query_params.get('tokenId', None)
+            token = self.request.query_params.get('token', None)
             if token is not None:
                 decoded_token = auth.verify_id_token(token)
                 uid = decoded_token['uid']
@@ -86,13 +89,14 @@ import os.path
                 }
                 return Response(data, status=status.HTTP_201_CREATED)
             else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                print("Tonen is NONE")
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         except ValueError as e:
             data = {
                 "error": str(e)
             }
             return Response(data, status=status.HTTP_401_UNAUTHORIZED) 
- """
+
 
 class CarSearchView(generics.ListAPIView):
     serializer_class = CarSearchSerializer
@@ -137,7 +141,8 @@ class ReservationList(generics.ListCreateAPIView):
     lookup_url_kwarg="token"
 
     def get_queryset(self):
-        token = self.kwargs.get(self.lookup_url_kwarg)
+        #token = self.kwargs.get(self.lookup_url_kwarg)
+        token = self.request.query_params.get('token', None)
         print("token: "+token)
         rents = CarRent.objects.all()
         if token is not None:
@@ -266,7 +271,11 @@ class ReservationList(generics.ListCreateAPIView):
             print("uidUSer: "+uidUser)
             bookingId = request.POST.get('bookingId')
             CarRent.objects.get(id=bookingId).delete()
-            return Response("ok")
+            serializer_context = {
+                'request': request,
+            }
+            serializer = DeleteReservationSerializer(CarRent.objects.all(), context=serializer_context)
+            return Response(serializer.data)
         else:
             error={
                 "error":"Token invalido"
@@ -276,11 +285,11 @@ class ReservationList(generics.ListCreateAPIView):
 
 def takeUid(token):
     #serializer_class = RentalSerializer
-    my_path = os.path.abspath(os.path.dirname(__file__))
+    """ my_path = os.path.abspath(os.path.dirname(__file__))
     cred = credentials.Certificate(os.path.join(
         my_path, "../renty-python-firebase-adminsdk.json"))
-    default_app = firebase_admin.initialize_app(cred)
-
+    default_app = firebase_admin.initialize_app(cred) """
+    
     try:
         decoded_token = auth.verify_id_token(token)
         uid = decoded_token['uid']
