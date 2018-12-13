@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import CarRental, Car, CarRent
-from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer, DeleteReservationSerializer
+from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
 from django.http import Http404, HttpResponse
 from django.utils.dateparse import parse_datetime, parse_date
 from datetime import datetime, date
@@ -89,7 +89,6 @@ def _parse_date(date):
     return parsed_date
 
 
-
 class ReservationList(generics.ListCreateAPIView):
     my_path = os.path.abspath(os.path.dirname(__file__))
     cred = credentials.Certificate(os.path.join(
@@ -100,7 +99,6 @@ class ReservationList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         token = self.kwargs.get(self.lookup_url_kwarg)
-        print("token: "+token)
         rents = CarRent.objects.all()
         if token is not None:
             uidUser = takeUid(token)
@@ -126,7 +124,6 @@ class ReservationList(generics.ListCreateAPIView):
             }
             return Response(error, status=status.HTTP_401_UNAUTHORIZED)
 
-        print("uidUser: "+uidUser)
         # se obtiene la información del auto a rentar
         cars = Car.objects.filter(id=request.POST.get('carId'))
         car = cars[0]
@@ -146,9 +143,7 @@ class ReservationList(generics.ListCreateAPIView):
         # fecha en la que se entrega el auto -fin de la renta-
         deliverDate = request.POST.get('deliverDate')
         deliverDate = _parse_date(str(deliverDate))
-
         # se crea el objeto a guardar
-        print("A guardar en base de datos")
         booking = CarRent(
             car=car,
             token="activo",
@@ -160,12 +155,10 @@ class ReservationList(generics.ListCreateAPIView):
             deliverDate=deliverDate,
             rental=rental
         )
-        print("Se gurdó en la base de datos")
         #se guarda el objeto
         #booking.save()
         try:
             booking.save()
-            print(booking.id)
             if booking.id is not None:
                 data = {
                     "statusCode":200
@@ -180,13 +173,10 @@ class ReservationList(generics.ListCreateAPIView):
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request):
-    # delete an object and send a confirmation response
         token = request.POST.get('token')
-        print("token: "+token)
         uidUser = takeUid(token)
         if uidUser is not None:
             #se elimina el dato
-            print("uidUSer: "+uidUser)
             try:
                 bookingId = request.POST.get('bookingId')
                 booking = CarRent.objects.get(id=bookingId)
@@ -198,15 +188,10 @@ class ReservationList(generics.ListCreateAPIView):
                 booking.token = "cancelado"
                 booking.save()
                 data = {
-                    "mensaje":"Se ha cancelado la reserva"
+                    "mensaje":"Cancelación Exitosa"
                 }
-                serializer_context = {
-                    'request': request,
-                }
-                serializer = DeleteReservationSerializer(CarRent.objects.all(), context=serializer_context)
                 return Response(data)
             except ValueError as a:
-                print(a)
                 error:{
                     "error":a
                 }
