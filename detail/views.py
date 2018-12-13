@@ -10,6 +10,7 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
 import firebase_admin
 from firebase_admin import credentials, auth
+import os
 
 
 class RentalView(generics.ListAPIView):
@@ -50,48 +51,6 @@ class CarView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-'''
-    def post(self, request):
-        serializer = CarSerializerToSave(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            Response["Access-Control-Allow-Origin"] = "*"
-            Response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-            Response["Access-Control-Max-Age"] = "1000"
-            Response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-'''
-import os.path
-
-
-class ReservationView(APIView):
-    serializer_class = RentalSerializer
-    my_path = os.path.abspath(os.path.dirname(__file__))
-    cred = credentials.Certificate(os.path.join(
-        my_path, "../renty-python-firebase-adminsdk.json"))
-    default_app = firebase_admin.initialize_app(cred)
-
-    def get(self, request):
-        try:
-            token = self.request.query_params.get('tokenId', None)
-            if token is not None:
-                decoded_token = auth.verify_id_token(token)
-                uid = decoded_token['uid']
-                data = {
-                    "uid": uid
-                }
-                return Response(data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except ValueError as e:
-            data = {
-                "error": str(e)
-            }
-            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class CarSearchView(generics.ListAPIView):
@@ -137,41 +96,47 @@ def _parse_date(date):
 
 
 class ReservationList(generics.ListCreateAPIView):
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    cred = credentials.Certificate(os.path.join(
+        my_path, "../renty-python-firebase-adminsdk.json"))
+    default_app = firebase_admin.initialize_app(cred)
     serializer_class = ReservationSerializer
+    lookup_url_kwarg = "token"
 
-    def get(self, request):
-        def message():
-            text = "hola mundo"
-        return Response("hola mundo")
+    def get_queryset(self):
+        #    token = self.kwargs.get('token')
+            # token = self.request.query_params.get('token', None)
+        token = self.kwargs.get(self.lookup_url_kwarg)
+        rents = CarRent.objects.all()
+        if token is not None:
+            uidUser = takeUid(token)
+            if uidUser is not None:
+                    # filtra las reservas del usuario
+                rents = rents.filter(uidUser=uidUser)
+                # filtra las reservas activas
+                rents = rents.filter(token="activo")
+                return rents
+            else:
+                print("Token invalido")
+        else:
+            print("token none")
 
     def post(self, request):
-        # print("Request: "+ request.data)
-        # se obtiene la información
-        # información del usuario
-        # Esto debe cambiar al hacer la validación del usuario
+        # se obtiene la información del usuario
         token = request.POST.get('token')
-        print(token)
-        # token = request.POST['token']
+        uidUser = takeUid(token)
+        if uidUser is None:
+            error = {
+                "error": "Token invalido"
+            }
+            return Response(error, status=status.HTTP_401_UNAUTHORIZED)
 
-        uidUser = "uidUserTry"
-        print(uidUser)
-        # obtengo la información del auto a rentar
-        # car = get_object_or_404(Car, id=request.POST.get('carId')) #cambiar por carId
-        print("ahora a buscar auto")
+        # se obtiene la información del auto a rentar
         cars = Car.objects.filter(id=request.POST.get('carId'))
         car = cars[0]
-        print("se encontró auto")
-        print(car.id)
-        # obtengo la información de la empresa rentadora del auto
-        # rental = get_object_or_404(CarRental, id=request.POST.get('rentalId')) #cambiar por rentalId
-        print("Ahora a buscar rental")
-        # rentals = CarRental.objects.filter(id=request.POST.get('rentalId'))
-        # rental = rentals[0]
+        # se obitene la información de la empresa rentadora del auto
         rental = car.rental
-        print("se encontró rental")
-        print(rental._id)
-
-        # obtengo el resto de información
+        # se obtiene el resto de información
         # Fecha en la que se hizo la reserva
         bookingDate = request.POST.get('bookingDate')
         bookingDate = _parse_date(str(bookingDate))
@@ -180,18 +145,27 @@ class ReservationList(generics.ListCreateAPIView):
         # fecha en la que se recoge el auto -comienza la renta-
         pickupDate = request.POST.get('pickupDate')
         pickupDate = _parse_date(str(pickupDate))
-        fromDate = pickupDate
         # Lugar donde se entregará el auto cuando finalice la renta
         deliverPlace = request.POST.get('deliverPlace')
         # fecha en la que se entrega el auto -fin de la renta-
         deliverDate = request.POST.get('deliverDate')
         deliverDate = _parse_date(str(deliverDate))
-        toDate = deliverDate
+
+        reservatedCars = getReservatedCars(pickupDate, deliverDate)
+        print(reservatedCars)
+        selectedCarReservations = reservatedCars.filter(car=car)
+        print(selectedCarReservations)
+
+        if selectedCarReservations is not Car.objects.none():
+            error = {
+                'error': 'El carro no esta disponible en esas fechas.'
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
         # se crea el objeto a guardar
-        rent_saved = CarRent(
+        booking = CarRent(
             car=car,
-            token=token,
+            token="activo",
             uidUser=uidUser,
             bookingDate=bookingDate,
             pickup=pickup,
@@ -200,7 +174,75 @@ class ReservationList(generics.ListCreateAPIView):
             deliverDate=deliverDate,
             rental=rental
         )
-        rent_saved.save()
+        # se guarda el objeto
+        # booking.save()
+        try:
+            booking.save()
+            if booking.id is not None:
+                data = {
+                    "statusCode": 200
+                }
+                return Response(data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as e:
+            data = {
+                "error": str(e)
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-        # return
-        return rent_saved
+    def put(self, request):
+        token = request.POST.get('token')
+        uidUser = takeUid(token)
+        if uidUser is not None:
+            # se elimina el dato
+            try:
+                bookingId = request.POST.get('bookingId')
+                booking = CarRent.objects.get(id=bookingId)
+                if booking.token == "cancelado":
+                    error = {
+                        "error": "La reserva ya se ha cancelado con anterioridad"
+                    }
+                    return Response(error, status=status.HTTP_400_BAD_REQUEST)
+                booking.token = "cancelado"
+                booking.save()
+                data = {
+                    "mensaje": "Cancelación Exitosa"
+                }
+                return Response(data)
+            except ValueError as a:
+                error: {
+                    "error": a
+                }
+                return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            error = {
+                "error": "Token invalido"
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+def takeUid(token):
+    try:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+        return uid
+    except ValueError as a:
+        print(a)
+        return None
+
+
+def getReservatedCars(_from, to):
+    reservatedCars = CarRent.objects.all()
+    fromReservations = reservatedCars.filter(
+        pickupDate__range=(_from, to))
+    toReservations = reservatedCars.filter(
+        deliverDate__range=(_from, to))
+    betweenReservations = reservatedCars.filter(
+        pickupDate__lte=_from,
+        deliverDate__gte=to
+    )
+    # Union
+    reservatedCars = (fromReservations | toReservations |
+                      betweenReservations).values('car')
+    return reservatedCars
