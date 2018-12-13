@@ -1,11 +1,15 @@
 from .settings import *
 
+# Sqlite settings
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': 'mydatabase',
 #     }
 # }
+
+# Codeship settings
 
 DATABASES = {
     'default': {
@@ -18,6 +22,7 @@ DATABASES = {
     }
 }
 
+# Local settings
 
 # DATABASES = {
 #     'default': {

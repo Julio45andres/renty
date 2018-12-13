@@ -74,11 +74,13 @@ class StringListField(serializers.ListField):
 
 
 class ReservationSerializer(serializers.HyperlinkedModelSerializer):
+    car = CarSerializer(read_only=True)
+    rental = RentalSerializer(read_only=True)
+
     class Meta:
         model = CarRent
         fields = (
             'bookingId',
-            'token',
             'car',
             'bookingDate',
             'pickup',
@@ -91,3 +93,6 @@ class ReservationSerializer(serializers.HyperlinkedModelSerializer):
 
 ReservationSerializer._declared_fields["bookingId"] = serializers.IntegerField(
     source="id")
+
+
+
