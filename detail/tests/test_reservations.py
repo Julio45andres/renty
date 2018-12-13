@@ -31,30 +31,30 @@ class ReservationTest(BaseTestCase):
                 pickup date: 2018-11-28
                 deliver date: 2018-12-5 """
 
-    # def test_whenBookingCar1WithoutConflict_expect_car1IsAvailable(self):
-    #     # POST api response
-    #     request = RequestBuilder.build(
-    #         _from='2018-10-25', to='2018-10-27')
-    #     bookingsUrl = reverse('get_post_bookings')
-    #     response = client.post(
-    #         path=bookingsUrl, data=request)
-    #     # print(Car.objects.all())
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_whenBookingCar1WithLowerBound_expect_car1IsNotAvailable(self):
+    def test_whenBookingCar1WithoutConflict_expect_car1IsAvailable(self):
         # POST api response
-        # Some booking
-        aBooking = RequestBuilder.build(
-            _from='2018-11-25', to='2018-11-27')
+        request = RequestBuilder.build(
+            _from='2018-10-25', to='2018-10-27')
         bookingsUrl = reverse('get_post_bookings')
         response = client.post(
-            path=bookingsUrl, data=aBooking)
-        # The same car
-        sameCar = Car.objects.first()
-        # a booking with conflicting lower bounds on dates
-        conflictingResquest = RequestBuilder.build(
-            _from='2018-11-24', to='2018-11-26', car=sameCar)
-        response = client.post(
-            path=bookingsUrl, data=conflictingResquest)
-        print(Car.objects.all())
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            path=bookingsUrl, data=request)
+        # print(Car.objects.all())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    # def test_whenBookingCar1WithLowerBound_expect_car1IsNotAvailable(self):
+    #     # POST api response
+    #     # Some booking
+    #     aBooking = RequestBuilder.build(
+    #         _from='2018-11-25', to='2018-11-27')
+    #     bookingsUrl = reverse('get_post_bookings')
+    #     response = client.post(
+    #         path=bookingsUrl, data=aBooking)
+    #     # The same car
+    #     sameCar = Car.objects.first()
+    #     # a booking with conflicting lower bounds on dates
+    #     conflictingResquest = RequestBuilder.build(
+    #         _from='2018-11-24', to='2018-11-26', car=sameCar)
+    #     response = client.post(
+    #         path=bookingsUrl, data=conflictingResquest)
+    #     print(Car.objects.all())
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

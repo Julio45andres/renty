@@ -151,16 +151,16 @@ class ReservationList(generics.ListCreateAPIView):
         deliverDate = request.POST.get('deliverDate')
         deliverDate = _parse_date(str(deliverDate))
 
-        reservatedCars = getReservatedCars(pickupDate, deliverDate)
-        print(reservatedCars)
-        selectedCarReservations = reservatedCars.filter(car=car)
-        print(selectedCarReservations)
+        # reservatedCars = getReservatedCars(pickupDate, deliverDate)
+        # print(reservatedCars)
+        # selectedCarReservations = reservatedCars.filter(car=car)
+        # print(selectedCarReservations)
 
-        if selectedCarReservations is not Car.objects.none():
-            error = {
-                'error': 'El carro no esta disponible en esas fechas.'
-            }
-            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        # if selectedCarReservations is not Car.objects.none():
+        #     error = {
+        #         'error': 'El carro no esta disponible en esas fechas.'
+        #     }
+        #     return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
         # se crea el objeto a guardar
         booking = CarRent(
