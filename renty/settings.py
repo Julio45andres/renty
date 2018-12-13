@@ -71,6 +71,13 @@ MIDDLEWARE_CLASSES = (
     # 'renty.middleware.corsMiddleware',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser'
+    )
+}
+
 # CORS Config
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True

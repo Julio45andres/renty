@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser, FormParser
 from .models import CarRental, Car, CarRent
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
 from django.http import Http404, HttpResponse
@@ -10,6 +11,9 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
 import firebase_admin
 from firebase_admin import credentials, auth
+
+import json
+
 import os
 
 
@@ -95,13 +99,14 @@ def _parse_date(date):
     return parsed_date
 
 
-class ReservationList(generics.ListCreateAPIView):
+class ReservationList(APIView):
     my_path = os.path.abspath(os.path.dirname(__file__))
     cred = credentials.Certificate(os.path.join(
         my_path, "../renty-python-firebase-adminsdk.json"))
     default_app = firebase_admin.initialize_app(cred)
     serializer_class = ReservationSerializer
     lookup_url_kwarg = "token"
+    parser_classes = (JSONParser, FormParser)
 
     def get_queryset(self):
         #    token = self.kwargs.get('token')
@@ -122,8 +127,10 @@ class ReservationList(generics.ListCreateAPIView):
             print("token none")
 
     def post(self, request):
+        data = json.loads(request.body)
         # se obtiene la información del usuario
-        token = request.POST.get('token')
+        token = data["token"]
+        print(token)
         uidUser = takeUid(token)
         if uidUser is None:
             error = {
@@ -132,23 +139,23 @@ class ReservationList(generics.ListCreateAPIView):
             return Response(error, status=status.HTTP_401_UNAUTHORIZED)
 
         # se obtiene la información del auto a rentar
-        cars = Car.objects.filter(id=request.POST.get('carId'))
+        cars = Car.objects.filter(id=data['carId'])
         car = cars[0]
         # se obitene la información de la empresa rentadora del auto
         rental = car.rental
         # se obtiene el resto de información
         # Fecha en la que se hizo la reserva
-        bookingDate = request.POST.get('bookingDate')
+        bookingDate = data['bookingDate']
         bookingDate = _parse_date(str(bookingDate))
         # pickup
-        pickup = request.POST.get('pickup')
+        pickup = data['pickup']
         # fecha en la que se recoge el auto -comienza la renta-
-        pickupDate = request.POST.get('pickupDate')
+        pickupDate = data['pickupDate']
         pickupDate = _parse_date(str(pickupDate))
         # Lugar donde se entregará el auto cuando finalice la renta
-        deliverPlace = request.POST.get('deliverPlace')
+        deliverPlace = data['deliverPlace']
         # fecha en la que se entrega el auto -fin de la renta-
-        deliverDate = request.POST.get('deliverDate')
+        deliverDate = data['deliverDate']
         deliverDate = _parse_date(str(deliverDate))
 
         # reservatedCars = getReservatedCars(pickupDate, deliverDate)
