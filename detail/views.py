@@ -183,7 +183,6 @@ class ReservationList(generics.ListCreateAPIView):
         # información del usuario
         # Esto debe cambiar al hacer la validación del usuario
         token = request.POST.get('token')
-        print('hola afdsjklfadsjkl')
         print(token)
         # token = request.POST['token']
 
@@ -214,6 +213,18 @@ class ReservationList(generics.ListCreateAPIView):
         # fecha en la que se entrega el auto -fin de la renta-
         deliverDate = request.POST.get('deliverDate')
         deliverDate = _parse_date(str(deliverDate))
+
+        reservatedCars = getReservatedCars(pickupDate, deliverDate)
+        print(reservatedCars)
+        selectedCarReservations = reservatedCars.filter(car=car)
+        print(selectedCarReservations)
+
+        if selectedCarReservations is not Car.objects.none():
+            print('por audfasjk')
+            error = {
+                'error': 'El carro no esta disponible en esas fechas.'
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
         # se crea el objeto a guardar
         print("A guardar en base de datos")
@@ -299,3 +310,19 @@ def takeUid(token):
     except ValueError as a:
         print(a)
         return None
+
+
+def getReservatedCars(_from, to):
+    reservatedCars = CarRent.objects.all()
+    fromReservations = reservatedCars.filter(
+        pickupDate__range=(_from, to))
+    toReservations = reservatedCars.filter(
+        deliverDate__range=(_from, to))
+    betweenReservations = reservatedCars.filter(
+        pickupDate__lte=_from,
+        deliverDate__gte=to
+    )
+    # Union
+    reservatedCars = (fromReservations | toReservations |
+                      betweenReservations).values('car')
+    return reservatedCars

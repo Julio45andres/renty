@@ -1,22 +1,27 @@
-import json
+from ...models import Car
+
+token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwOTBjZGI5MmIzOTZiNTQyM2JhYjYyOWM5ZTk4MmFkYzIxYmQxMTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVudHktdnVlIiwiYXVkIjoicmVudHktdnVlIiwiYXV0aF90aW1lIjoxNTQ0NjgyNTE1LCJ1c2VyX2lkIjoiTERGaTVaZ2VSYWdCVGEzQWlHTWZKbEl4WmdkMiIsInN1YiI6IkxERmk1WmdlUmFnQlRhM0FpR01mSmxJeFpnZDIiLCJpYXQiOjE1NDQ2ODI1MTUsImV4cCI6MTU0NDY4NjExNSwiZW1haWwiOiJqdWxpYW4ubXVub3ptQHVkZWEuZWR1LmNvIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImp1bGlhbi5tdW5vem1AdWRlYS5lZHUuY28iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.lkhBbNouUo7b1GdhLsULKxNaVbImTiobKjPDyFzbB9pKCGtLW0cmRLR_97iPdJqFq0A7e7hbQ-p4xGZiA2kb8TjxGp-qqCWaYuvFPp74EH_7KZBg9zLn9f9xOJUHbHlFxh9xTeEdmFEWuJNtnw3ky1SHaNVU_LmxVfXY5nsbgF-3noFYMsx92JIDgod1Y9R0-FPFnOZrW4rC4Acoq2YMUrbQD7lfsLmn8BCJkyzFl2HpFRKGPDGgV8GecTWbqi2d4qLJiUiim8ywK4ML44eK8QvjVvOgDMYgpF1UkTBA3Q91FmeOv0IagFtEQMag3JSLu8_7HrAUuMkQY87Iw_MlDA'
 
 
-car1Dict = {
-    'token': 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwOTBjZGI5MmIzOTZiNTQyM2JhYjYyOWM5ZTk4MmFkYzIxYmQxMTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVudHktdnVlIiwiYXVkIjoicmVudHktdnVlIiwiYXV0aF90aW1lIjoxNTQ0NjUxMjY3LCJ1c2VyX2lkIjoiTERGaTVaZ2VSYWdCVGEzQWlHTWZKbEl4WmdkMiIsInN1YiI6IkxERmk1WmdlUmFnQlRhM0FpR01mSmxJeFpnZDIiLCJpYXQiOjE1NDQ2NTEyNjcsImV4cCI6MTU0NDY1NDg2NywiZW1haWwiOiJqdWxpYW4ubXVub3ptQHVkZWEuZWR1LmNvIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImp1bGlhbi5tdW5vem1AdWRlYS5lZHUuY28iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.HMRINOO2ueWSuYO7yGV1m9ecPefpbo0cWcfRXbGiEl_PMAyT0ydwzA2jK05VM0dBiKNj1rrnBGzb5ehk4L8xprCccTzUjHO7ZoIDG3nl_g7Sr9f2-6GukHYGthoPZ5FAhtxagP7S30YmI1eIFdHpA-J25y4tbUs8t91oHyeAZQGzD-Pco3_kK0viThhgj2tFnkq_yo8HgdAvhFxFtI9vAKzU5LUVrBMzUJ9_G2VMwtnYvt49MBvoDAkC-OgZLNIVh0hhkomjUZG5suTRE79mZ5MiUUxtGSG7193RnKeoa1m2KunEzri6CqPs342ozzH0m0URKRkjT_XW1xxvEqbOlA',
-    "carId": 1,
-    "bookingDate": "2018-10-12",
-    "pickup": "MDE",
-    "pickupDate": "2018-10-13",
-    "deliverPlace": "El poblado",
-    "deliverDate": "2018-10-15"
-}
-# car1Dict = json.dumps(car1JSON)
-# {
-#     "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwOTBjZGI5MmIzOTZiNTQyM2JhYjYyOWM5ZTk4MmFkYzIxYmQxMTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVudHktdnVlIiwiYXVkIjoicmVudHktdnVlIiwiYXV0aF90aW1lIjoxNTQ0NjUwMjE1LCJ1c2VyX2lkIjoiTERGaTVaZ2VSYWdCVGEzQWlHTWZKbEl4WmdkMiIsInN1YiI6IkxERmk1WmdlUmFnQlRhM0FpR01mSmxJeFpnZDIiLCJpYXQiOjE1NDQ2NTAyMTUsImV4cCI6MTU0NDY1MzgxNSwiZW1haWwiOiJqdWxpYW4ubXVub3ptQHVkZWEuZWR1LmNvIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImp1bGlhbi5tdW5vem1AdWRlYS5lZHUuY28iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.ICyuCv2A96tmRNHAHUEX8ngzStgs5AezRdqP4LKU9OlVpfmFCv8uE1VTQSa_JpJ0xStryeUzb1aWlGdxUjPT9LiXvtTiMfOYtnRzsOvi-NtvpOL1F8-qTZrpljI8-EBUJKWiRIGcu9DAOPyRwvJsBq-eOLiy6pcYnJLscovHD79KbTiDKdInssyJJfUNK7FGulOQtEk3u51kvyT8tskGsabwJj1m6V5HO-9cb2vtDS3T2phHRXsH8DMKZtBUfJOzXqipSjaQrTdXSCccl5wDRKgjjstlihmsLt7yyfRklSHuC1gpnOMw8cFNPejPIQZWW5EF7wLZM5MU8hWA0kNpGw",
-#     "carId":"2",
-#     "bookingDate": "2018-10-12",
-#     pickup:MDE
-#     pickupDate:2018-10-13
-#     deliverPlace:El poblado
-#     deliverDate:2018-10-15
-# }
+class RequestBuilder:
+    def build(_from, to, car=None):
+        """ En los métodos setup se generan nuevos autos cada vez que corre un test, sin embargo
+            la tabla autos tiene un id autoincrementable, por lo cual los nuevos autos no empiezan desde 1.
+            Es válido que un auto con id 7 sea el primero en la base de datos, pues los autos
+            con id del 1 al 6 han sido borrados despues de algunos tests, por esta razon buscamos al primero
+            y no por id específico. """
+        if car is None:
+            car = Car.objects.first()
+        id = car.id
+        car1Request = {
+            'token': token,
+            "carId": id,
+            "bookingDate": "2018-11-12",
+            "pickup": "MDE",
+            "pickupDate": _from,
+            "deliverPlace": to,
+            "deliverDate": "2018-10-15"
+        }
+        return car1Request
+# from "2018-10-13"
+# to "2018-10-15"
