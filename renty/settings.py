@@ -80,6 +80,7 @@ NOSE_ARGS = [
     '--cover-html',
     '--cover-html-dir=htmlcov',
     '--cover-package=detail',
+    '--with-coverage'
 ]
 
 # CORS Config
