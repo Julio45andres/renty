@@ -1,6 +1,6 @@
 from ...models import Car
 
-token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwOTBjZGI5MmIzOTZiNTQyM2JhYjYyOWM5ZTk4MmFkYzIxYmQxMTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVudHktdnVlIiwiYXVkIjoicmVudHktdnVlIiwiYXV0aF90aW1lIjoxNTQ0NjgzNzQyLCJ1c2VyX2lkIjoiTERGaTVaZ2VSYWdCVGEzQWlHTWZKbEl4WmdkMiIsInN1YiI6IkxERmk1WmdlUmFnQlRhM0FpR01mSmxJeFpnZDIiLCJpYXQiOjE1NDQ2ODM3NDIsImV4cCI6MTU0NDY4NzM0MiwiZW1haWwiOiJqdWxpYW4ubXVub3ptQHVkZWEuZWR1LmNvIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImp1bGlhbi5tdW5vem1AdWRlYS5lZHUuY28iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.BYaXgmp1y0pzXWHSUa-TWt_HzUyt0ahyqgeTH8dpOD4moMlTN1pQhQvjG-ZI3jQOIH8zbNzKHYhHm5lRRrStxlx9Ee_xMZ1V-XLWPxZCGtJVd9mqfa7aNdp94Vqi68mbUcP4g1SGMy1jr5HLvI0zIIyJuf29cu7wfkocptcH5wzRhGsdyMuRTTCiLTyka2Gck6XRjMjlX048NGNpzhDM5KUa_QnLCet926a5RIVEe_uAbrB7ziTFkGFfb9nLucBeHtaBanOP3Rqz-khVMtUgj6Ht57ZrG33yEalOdjD3Pz_l6Nn0yZ3sLecYURiT0qIdLphIgHnEDjer9IGLsZTaew'
+token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwOTBjZGI5MmIzOTZiNTQyM2JhYjYyOWM5ZTk4MmFkYzIxYmQxMTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcmVudHktdnVlIiwiYXVkIjoicmVudHktdnVlIiwiYXV0aF90aW1lIjoxNTQ0NzYzNjE3LCJ1c2VyX2lkIjoiTERGaTVaZ2VSYWdCVGEzQWlHTWZKbEl4WmdkMiIsInN1YiI6IkxERmk1WmdlUmFnQlRhM0FpR01mSmxJeFpnZDIiLCJpYXQiOjE1NDQ3NjM2MTcsImV4cCI6MTU0NDc2NzIxNywiZW1haWwiOiJqdWxpYW4ubXVub3ptQHVkZWEuZWR1LmNvIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImp1bGlhbi5tdW5vem1AdWRlYS5lZHUuY28iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.ZQD-Vdv2UoFpkwcrh756U178ta0yfZFA2ofvxCUFrsQ8Pra_OH6UxbpzCi2qr6eEx9CxinhGV-YakfTtTpRrjW0BsE1-Cg61VmRoWNMjeQyy5cWoRudEjZ7ozw8HaOC7UFuhe5chZhVbbz3rV7qvIViBiDx83rh_BT_lXyEsC09Xxn5mw_v0Gt2mkxMgWJY8IkVS4ZlFQDfHnfW-aqc5gaGgIfhAHt54SW0Dr7lEb6zecijzQBwkFxl_XBvikcOU-TTaeIN6n2yFOCeyGoDYrzTOI4lwivp9BERWwtI3_UrE371FKQCrWgkaHfHrtuNlz0YcwX2KTpnI0esNqwidaA'
 
 
 class RequestBuilder:
@@ -19,8 +19,8 @@ class RequestBuilder:
             "bookingDate": "2018-11-12",
             "pickup": "MDE",
             "pickupDate": _from,
-            "deliverPlace": to,
-            "deliverDate": "2018-10-15"
+            "deliverPlace": "MDE",
+            "deliverDate": to
         }
         return car1Request
 # from "2018-10-13"

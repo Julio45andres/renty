@@ -5,6 +5,7 @@ from .models import CarRental, Car, CarRent
 from .serializers import RentalSerializer, CarSerializer, CarSerializerToSave, CarSearchSerializer, ReservationSerializer
 from django.http import Http404, HttpResponse
 from django.utils.dateparse import parse_datetime, parse_date
+from django.db.models.query import EmptyQuerySet
 from datetime import datetime, date
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
@@ -151,16 +152,15 @@ class ReservationList(generics.ListCreateAPIView):
         deliverDate = request.POST.get('deliverDate')
         deliverDate = _parse_date(str(deliverDate))
 
-        # reservatedCars = getReservatedCars(pickupDate, deliverDate)
-        # print(reservatedCars)
-        # selectedCarReservations = reservatedCars.filter(car=car)
-        # print(selectedCarReservations)
+        reservatedCars = getReservatedCars(pickupDate, deliverDate)
+        selectedCarReservations = reservatedCars.filter(car=car)
 
-        # if selectedCarReservations is not Car.objects.none():
-        #     error = {
-        #         'error': 'El carro no esta disponible en esas fechas.'
-        #     }
-        #     return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        if selectedCarReservations:
+            print('Conflicto de reservas: carro ya reservado.')
+            error = {
+                'error': 'El carro no esta disponible en esas fechas.'
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
         # se crea el objeto a guardar
         booking = CarRent(
@@ -234,6 +234,8 @@ def takeUid(token):
 
 def getReservatedCars(_from, to):
     reservatedCars = CarRent.objects.all()
+    print('hereeeeeeeeeeeeeeeeee')
+    print(CarRent.objects.none())
     fromReservations = reservatedCars.filter(
         pickupDate__range=(_from, to))
     toReservations = reservatedCars.filter(

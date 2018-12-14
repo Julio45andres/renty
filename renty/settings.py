@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # Framework REST django
     'rest_framework',
     'rest_framework_swagger',
+    'django_nose',
     'corsheaders',
 ]
 
@@ -70,6 +71,17 @@ MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsPostCsrfMiddleware',
     # 'renty.middleware.corsMiddleware',
 )
+
+# Coverage config
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-html',
+    '--cover-html-dir=htmlcov',
+    '--cover-package=detail',
+    '--with-coverage'
+]
 
 # CORS Config
 CORS_ORIGIN_ALLOW_ALL = True
